@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<assets path="alsoft.txt" rename="alsoft.ini" type="text" if="windows"/>
+	<assets path="alsoft.txt" rename="alsoft.conf" type="text" unless="windows"/>
+
+	<haxelib name="flixel"/>
+
+	<source path="src"/>
+	
+	<!-- 
+	since this is called when the lib is defined
+	i suggest setting up nevermore defines 
+	BEFORE `<haxelib name="nevermore"/>` is called -rudy
+	(TODO: look more on genericBuild, it may help with my issue which this fixes) -srt
+	-->
+	<section unless="NEVERMORE_NO_MODCHARTS">
+		<haxeflag name="--macro" value="haxe.macro.Compiler.include('nevermore.modchart.mods')"/>
+	</section>
+
+	<haxedef name="FLX_NO_TOUCH"/>
+	<haxedef name="FLX_NO_GAMEPAD"/> <!-- for now -->
+
+	<!--
+		NEVERMORE_NO_MODCHARTS
+		NEVERMORE_NO_QUANTIZATION
+		NEVERMORE_NO_PLAY_MODIFIERS
+
+		maybe take a page out of flixel
+		so checking defines in code is just
+		NEVERMORE_FEATURE
+		instead of
+		!NEVERMORE_NO_FEATURE
+		?
+	-->
+</project>
