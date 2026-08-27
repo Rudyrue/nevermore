@@ -2,39 +2,44 @@ package nevermore.backend;
 
 import sys.io.Process;
 
+@:structInit
+@:publicFields
+class Commit {
+	var short:String = '';
+	var long:String = '';
+	var count:Int = 0;
+}
+
 class Git {
-	public static var commit(get, never):String;
-	static inline function get_commit() {
-		return __getCommit();
-	}
-	static macro function __getCommit() {
-		return macro $v{gitProcess(['rev-parse', '--short', 'HEAD']) ?? '???'};
-	}
-
-	public static var commitLong(get, never):String;
-	static inline function get_commitLong() {
-		return __getCommitLong();
-	}
-	static macro function __getCommitLong() {
-		return macro $v{gitProcess(['rev-parse', 'HEAD']) ?? '???'};
-	}
-
-	public static var commitNumber(get, never):Int;
-	static inline function get_commitNumber() {
-		return Std.parseInt(__getCommitNumber());
-	}
-	static macro function __getCommitNumber() {
-		return macro $v{gitProcess(['rev-list', '--count', 'HEAD']) ?? '0'};
+	public static var commit(get, never):Commit;
+	static function get_commit():Commit {
+		return {
+			short: getShort(),
+			long: getLong(),
+			count: getCommitCount()
+		}
 	}
 
 	public static var branch(get, never):String;
-	static inline function get_branch() {
-		return __getBranch();
-	}
-	static macro function __getBranch() {
-		return macro $v{gitProcess(['branch', '--show-current']) ?? '???'};
+	static function get_branch():String {
+		return getBranch();
 	}
 
+	static macro function getShort() {
+		return macro $v{gitProcess(['rev-parse', '--short', 'HEAD']) ?? '???'};
+	}
+
+	static macro function getLong() {
+		return macro $v{gitProcess(['rev-parse', 'HEAD']) ?? '???'};
+	}
+
+	static macro function getCommitCount() {
+		return macro $v{Std.parseInt(gitProcess(['rev-list', '--count', 'HEAD']) ?? '0')};
+	}
+
+	static macro function getBranch() {
+		return macro $v{gitProcess(['branch', '--show-current']) ?? '???'};
+	}
 
 	// haxe i should kill you for running all macros in the project folder
 	// and not where the macro originates
