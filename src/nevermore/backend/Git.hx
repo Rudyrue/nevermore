@@ -5,8 +5,8 @@ import sys.io.Process;
 @:structInit
 @:publicFields
 class Commit {
-	var short:String = '';
-	var long:String = '';
+	var shortHash:String = '';
+	var longHash:String = '';
 	var count:Int = 0;
 }
 
@@ -14,8 +14,8 @@ class Git {
 	public static var commit(get, never):Commit;
 	static function get_commit():Commit {
 		return {
-			short: getShort(),
-			long: getLong(),
+			shortHash: getShortHash(),
+			longHash: getLongHash(),
 			count: getCommitCount()
 		}
 	}
@@ -25,11 +25,11 @@ class Git {
 		return getBranch();
 	}
 
-	static macro function getShort() {
+	static macro function getShortHash() {
 		return macro $v{gitProcess(['rev-parse', '--short', 'HEAD']) ?? '???'};
 	}
 
-	static macro function getLong() {
+	static macro function getLongHash() {
 		return macro $v{gitProcess(['rev-parse', 'HEAD']) ?? '???'};
 	}
 
