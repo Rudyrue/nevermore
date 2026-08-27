@@ -1,0 +1,39 @@
+ok originally i wasn't planning on adding something like this
+but flxsound keeps crashing whenever i switch states
+also i need to do streaming (which doesn't exist in flxsound)
+so we're doing this
+
+preferably NO MACROS involved in this
+NONE
+NO MACROS
+ZILCH
+
+i would like to override FlxG.sound but 
+that requires us to use FlxSound
+so we need our own manager instead
+
+maybe something like this
+
+audio -> [
+	AudioManager
+	Audio
+	formats -> [
+		FLACFormat
+		WAVFormat
+		MP3Format
+		OGGFormat
+	]
+]
+
+nevermore.audio.Audio;
+nevermore.audio.AudioManager;
+nevermore.audio.formats.FLACFormat;
+
+this way we keep
+* our own audio system
+* streaming
+* and custom formats
+
+not too much to deal with
+and it's not trying too hard to be its own library
+with a shitload of features like filters, visualization and what not
