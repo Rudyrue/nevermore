@@ -19,14 +19,14 @@ class Git {
 		return macro $v{gitProcess(['rev-list', '--count', 'HEAD'])};
 	}
 
-	public static var commitDate(get, never):Date;
-	static inline function get_commitDate() {
-		var fuck:String = __getCommitDate();
-		return Date.fromString(fuck.substr(0, 19)); // exclude the "-0700" thing i forgot the name
+	public static var branch(get, never):String;
+	static inline function get_branch() {
+		return __getBranch();
 	}
-	static macro function __getCommitDate() {
-		return macro $v{gitProcess(['log', '-1', '--format=%ci'])};
+	static macro function __getBranch() {
+		return macro $v{gitProcess(['branch', '--show-current'])};
 	}
+
 
 	// haxe i should kill you for running all macros in the project folder
 	// and not where the macro originates

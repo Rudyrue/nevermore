@@ -60,6 +60,21 @@ class Nevermore {
 
 	public static var initialized:Bool = false;
 
+	public static var commitHash(get, never):String;
+	static function get_commitHash():String {
+		return Git.commitHash;
+	}
+
+	public static var commitNumber(get, never):Int;
+	static function get_commitNumber():Int {
+		return Git.commitNumber;
+	}
+
+	public static var branch(get, never):String;
+	static function get_branch():String {
+		return Git.branch;
+	}
+
 	public static function init() {
 		if (initialized) return;
 		initialized = true;
