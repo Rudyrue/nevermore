@@ -24,7 +24,7 @@ class Git {
 		return Std.parseInt(__getCommitNumber());
 	}
 	static macro function __getCommitNumber() {
-		return macro $v{gitProcess(['rev-list', '--count', 'HEAD']) ?? ''};
+		return macro $v{gitProcess(['rev-list', '--count', 'HEAD']) ?? '0'};
 	}
 
 	public static var branch(get, never):String;
