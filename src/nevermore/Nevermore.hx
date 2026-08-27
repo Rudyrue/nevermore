@@ -60,9 +60,14 @@ class Nevermore {
 
 	public static var initialized:Bool = false;
 
-	public static var commitHash(get, never):String;
-	static function get_commitHash():String {
-		return Git.commitHash;
+	public static var commit(get, never):String;
+	static function get_commit():String {
+		return Git.commit;
+	}
+
+	public static var commitLong(get, never):String;
+	static function get_commitLong():String {
+		return Git.commitLong;
 	}
 
 	public static var commitNumber(get, never):Int;
