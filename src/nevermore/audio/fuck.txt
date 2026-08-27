@@ -37,3 +37,7 @@ this way we keep
 not too much to deal with
 and it's not trying too hard to be its own library
 with a shitload of features like filters, visualization and what not
+
+remember, never2x (and by proxy, nevermore) is meant to be LIGHTWEIGHT
+and SMALL, yet powerful in what it tries to accomplish
+we're not codename
