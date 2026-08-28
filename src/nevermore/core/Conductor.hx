@@ -115,16 +115,6 @@ class Conductor extends flixel.FlxBasic {
 		vocals = null;
 	}
 
-	public static function load(instrumental:String, ?voices:String = '') {
-		inst = FlxG.sound.load(Assets.audio(instrumental));
-
-		if (voices.length > 0) {
-			try {
-				vocals = FlxG.sound.load(Assets.audio(voices));
-			} catch(_) {}
-		}
-	}
-
 	public static function play() {
 		inst.play();
 		if (vocals != null) vocals.play();

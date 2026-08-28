@@ -5,6 +5,7 @@ import openfl.media.Sound;
 import openfl.system.System;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
+import lime.media.AudioBuffer;
 
 class Assets {
 	public static var imageExt:String = 'png';
@@ -51,6 +52,28 @@ class Assets {
 		var sound:Sound = Sound.fromFile(path);
 		cache.set(path, {src: Audio(sound)});
 		return sound;
+	}
+
+	// TODO:
+	// only tested on lime develop
+	// somehow figure out how to make it work for pre-8.4.0?
+	public static function streamedAudio(key:String):Sound {
+		#if (lime >= version("8.4.0"))
+		if (key.lastIndexOf('.') < 0) key += '.$audioExt';
+		var path = getPath(key);
+		if (cache.exists(path)) {
+			return switch cache.get(path).src {
+				case Audio(sound): sound;
+				default: null;
+			}
+		}
+
+		var sound:Sound = Sound.fromAudioBuffer(AudioBuffer.fromFileStream(path));
+		cache.set(path, {src: Audio(sound)});
+		return sound;
+		#else
+		return audio(key);
+		#end
 	}
 
 	public static function text(key:String):String {

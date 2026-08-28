@@ -37,7 +37,7 @@ var playfield = new PlayField([strumline], 0);
 add(playfield);
 
 // load the audio and chart
-Conductor.load(songID + '/Inst');
+Conductor.inst = FlxG.sound.load(Assets.audio('$songID/Inst'));
 playfield.load(Song.load(songID, difficulty), {
 	randomizedNotes: true,
 	sustains: false
