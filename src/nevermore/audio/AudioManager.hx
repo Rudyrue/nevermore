@@ -9,6 +9,7 @@ import openfl.events.Event;
 // than FlxG.sound
 class AudioManager extends flixel.FlxBasic {
 	public static var list:Array<Audio> = [];
+	public static var streaming:Bool = true;
 
 	public static var volume(default, set):Float = 1.0;
 	static function set_volume(v:Float):Float {
