@@ -41,3 +41,8 @@ with a shitload of features like filters, visualization and what not
 remember, never2x (and by proxy, nevermore) is meant to be LIGHTWEIGHT
 and SMALL, yet powerful in what it tries to accomplish
 we're not codename
+
+update:
+this MIGHT not be needed
+but we'll see
+either way last paragraph sums up this repo well anyways
