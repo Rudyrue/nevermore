@@ -52,13 +52,7 @@ class Conductor extends flixel.FlxBasic {
 
 	public static var inst(default, set):FlxSound;
     static function set_inst(value:FlxSound):FlxSound {
-		if (inst != null) {
-			inst.stop();
-			inst.destroy();
-			FlxG.sound.list.remove(inst);
-			inst = null;
-		}
-
+		if (inst != null) inst.stop();
     	if (value == null) return clock.audio = value;
 
         value.persist = true;
@@ -69,13 +63,7 @@ class Conductor extends flixel.FlxBasic {
 
 	public static var vocals(default, set):FlxSound;
     static function set_vocals(value:FlxSound):FlxSound {
-		if (vocals != null) {
-			vocals.stop();
-			vocals.destroy();
-			FlxG.sound.list.remove(vocals);
-			vocals = null;
-		}
-
+		if (vocals != null) vocals.stop();
     	if (value == null) return value;
 
         value.persist = true;
