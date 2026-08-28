@@ -10,15 +10,15 @@ enum abstract QuantType(String) from String to String {
 }
 
 class Quantization {
-	public static final RED:FlxColor = 0xFFFE2E2E;
-	public static final BLUE:FlxColor = 0xFF006CE7;
-	public static final PURPLE:FlxColor = 0xFFBB32FF;
-	public static final YELLOW:FlxColor = 0xFFFFFF28;
-	public static final MAGENTA:FlxColor = 0xFFFF7CC4;
-	public static final ORANGE:FlxColor = 0xFFFF7F00;
-	public static final TEAL:FlxColor = 0xFF38D1D1;
-	public static final GREEN:FlxColor = 0xFF0CF23;
-	public static final NONE:FlxColor = 0xFF5F5F5F;
+	public static final RED:FlxColor = 0xFFFF2B32;
+	public static final BLUE:FlxColor = 0xFF0861FF;
+	public static final PURPLE:FlxColor = 0xFFC228FF;
+	public static final YELLOW:FlxColor = 0xFFFFE900;
+	public static final MAGENTA:FlxColor = 0xFFFF00CB;
+	public static final ORANGE:FlxColor = 0xFFFF9400;
+	public static final TEAL:FlxColor = 0xFF00EDFF;
+	public static final GREEN:FlxColor = 0xFF3FFF3F;
+	public static final GRAY:FlxColor = 0xFF878787;
 
 	public static var current:Array<Int>;
 	public static final list:Map<String, Array<FlxColor>> = [
@@ -27,13 +27,13 @@ class Quantization {
 			BLUE,    // 8th
 			GREEN,   // 12th
 			YELLOW,  // 16th
-			NONE,    // 20th
+			GRAY,    // 20th
 			PURPLE,  // 24th
 			TEAL,    // 32nd
 			MAGENTA, // 48th
-			NONE,    // 64th
-			NONE,    // 96th
-			NONE     // 192nd
+			GRAY,    // 64th
+			GRAY,    // 96th
+			GRAY     // 192nd
 		],
 
 		'ArrowVortex' => [
@@ -41,13 +41,13 @@ class Quantization {
 			BLUE,    // 8th
 			PURPLE,  // 12th
 			YELLOW,  // 16th
-			NONE,    // 20th 
+			GRAY,    // 20th 
 			MAGENTA, // 24th
 			ORANGE,  // 32nd
 			TEAL,    // 48th
 			GREEN,   // 64th
-			NONE,    // 96th
-			NONE     // 192nd
+			GRAY,    // 96th
+			GRAY     // 192nd
 		],
 
 		'Custom' => [
