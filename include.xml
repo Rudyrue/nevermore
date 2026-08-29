@@ -16,6 +16,8 @@
 	<section unless="NEVERMORE_NO_MODCHARTS">
 		<haxeflag name="--macro" value="haxe.macro.Compiler.include('nevermore.modchart.mods')"/>
 	</section>
+	<haxeflag name="--macro" value="haxe.macro.Compiler.addMetadata('@:build(nevermore.macros.NoteItemMacro.attachNoteType())', 'flixel.graphics.tile.FlxDrawItemType')"/>
+	<haxeflag name="--macro" value="haxe.macro.Compiler.addMetadata('@:build(nevermore.macros.NoteItemMacro.attachNoteItem())', 'flixel.FlxCamera')"/>
 
 	<haxedef name="FLX_NO_TOUCH"/>
 	<haxedef name="FLX_NO_GAMEPAD"/> <!-- for now -->

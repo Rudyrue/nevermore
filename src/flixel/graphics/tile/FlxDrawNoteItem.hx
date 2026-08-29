@@ -25,12 +25,20 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 	var verts:Array<Float>;
 	var stealthColor:Array<Float>;
 
+	var alphas:Array<Float>;
+	var colorMultipliers:Array<Float>;
+	var colorOffsets:Array<Float>;
+
 	public function new() {
 		super();
 		type = FlxDrawItemType.NOTE;
 		rects = new Vector<Float>();
 		verts = [];
 		stealthColor = [];
+
+		alphas = [];
+		colorMultipliers = [];
+		colorOffsets = [];
 	}
 
 	override public function reset():Void {
@@ -39,6 +47,10 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 		rects.length = 0;
 		verts.resize(0);
 		stealthColor.resize(0);
+
+		alphas.resize(0);
+		colorMultipliers.resize(0);
+		colorOffsets.resize(0);
 	}
 
 	override public function dispose():Void {
@@ -47,6 +59,10 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 		rects = null;
 		verts = null;
 		stealthColor = null;
+
+		alphas = null;
+		colorMultipliers = null;
+		colorOffsets = null;
 	}
 
 	public function addVertices(frame:FlxFrame, vertices:Array<Float>, ?transform:ColorTransform, ?stealth:Float, ?alpha:Float, ?stealthCol:Vector3) {
@@ -58,10 +74,8 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 
 		verts = verts.concat(vertices);
 
-		transform ??= FlxDrawBaseItem.colorIdentity;
+		transform ??= backupColour;
 		stealthCol ??= backupStealth;
-		colorMultipliers ??= [];
-		colorOffsets ??= [];
 
 		for (i in 0...VERTICES_PER_QUAD) {
 			alphas.push(alpha);
@@ -100,9 +114,7 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 		verts.push(matrix.transformX(frame.frame.width, frame.frame.height));
 		verts.push(matrix.transformY(frame.frame.width, frame.frame.height));
 
-		transform ??= FlxDrawBaseItem.colorIdentity;
-		colorMultipliers ??= [];
-		colorOffsets ??= [];
+		transform ??= backupColour;
 
 		for (i in 0...VERTICES_PER_QUAD) {
 			alphas.push(transform.alphaMultiplier);
