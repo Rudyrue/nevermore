@@ -72,7 +72,8 @@ class FlxDrawNoteItem extends FlxDrawBaseItem<FlxDrawNoteItem> {
 		rects.push(rect.width);
 		rects.push(rect.height);
 
-		verts = verts.concat(vertices);
+		for (i in 0...vertices.length)
+			verts.push(vertices[i]);
 
 		transform ??= backupColour;
 		stealthCol ??= backupStealth;
