@@ -63,13 +63,14 @@ class Conductor extends flixel.FlxBasic {
 
 	public static var vocals(default, set):FlxSound;
     static function set_vocals(value:FlxSound):FlxSound {
-		if (vocals != null) vocals.stop();
-    	if (value == null) return value;
+			if (vocals != null) vocals.stop();
+	    	if (value != null) {	   
+				value.persist = true;
+				value.volume = volume;
+				#if FLX_PITCH value.pitch = rate; #end
+			}
 
-        value.persist = true;
-		value.volume = volume;
-		#if FLX_PITCH value.pitch = rate; #end
-        return vocals = value;
+	    return vocals = value;
     }
 
 	public static var volume(default, set):Float = 1.0;
