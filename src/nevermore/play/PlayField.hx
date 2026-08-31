@@ -55,9 +55,12 @@ class PlayField extends flixel.group.FlxGroup {
 		return playerID = value;
 	}
 
-	public var botplay(default, set):Bool = false;
+	@:isVar public var botplay(get, set):Bool;
+	function get_botplay():Bool {
+		return player.ai;
+	}
 	function set_botplay(v:Bool):Bool {
-		return botplay = player.ai = v;
+		return player.ai = v;
 	}
 
 	public var scrollSpeed(default, set):Float;
