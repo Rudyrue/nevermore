@@ -6,6 +6,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.FlxCamera;
 import nevermore.core.chart.Chart;
 import nevermore.core.timing.BaseClock;
+import nevermore.core.timing.VelocityClock;
 import nevermore.core.timing.TimingPoint;
 import nevermore.play.NoteSpawner;
 import nevermore.play.Sustain;
@@ -92,6 +93,8 @@ class PlayField extends flixel.group.FlxGroup {
 		return clock;
 	}
 
+	public var scrollVelocities:VelocityClock;
+
 	public var unspawnedNotes(get, never):Array<NoteData>;
 	function get_unspawnedNotes():Array<NoteData> return spawner?.list ?? [];
 
@@ -135,6 +138,10 @@ class PlayField extends flixel.group.FlxGroup {
 		if (modchart != null) modchart.update();
 		#end
 
+		if (modifiers.scrollVelocities) {
+			scrollVelocities.updateSVs(clock);
+		}
+
 		strumlines.update(delta);
 		spawner.update(clock);
 		
@@ -142,7 +149,7 @@ class PlayField extends flixel.group.FlxGroup {
 			var note:Note = notes.members[i];
 			if (!note.exists) continue;
 
-			note.move(clock);
+			note.move(modifiers.scrollVelocities ? scrollVelocities : clock);
 			if (note.strumline.ai) aiInputs(note);
 			else if (!note.missed && note.tooLate) {
 				note.missed = true; 
@@ -159,7 +166,7 @@ class PlayField extends flixel.group.FlxGroup {
 			if (!sustain.exists) continue;
 
 			sustainInputs(sustain);
-			sustain.move(clock);
+			sustain.move(modifiers.scrollVelocities ? scrollVelocities : clock);
 			sustain.calcHeight(sustain.strumline.speed / clock.rate);
 
 			if (sustain.adjustedTime + sustain.length < clock.time - killDelay) {
@@ -185,6 +192,9 @@ class PlayField extends flixel.group.FlxGroup {
 		this.modifiers = {};
 		#end
 
+		if (modifiers.scrollVelocities) {
+			scrollVelocities = new VelocityClock(chart.scrollVelocities);
+		}
 		noteCount.resize(strumlines.length);
 
 		clock.reset(chart.timingPoints, chart.offset);
@@ -214,6 +224,13 @@ class PlayField extends flixel.group.FlxGroup {
 		for (note in chart.notes) {
 			note.lane = lanes[note.lane];
 			if (!modifiers.sustains) note.length = 0;
+			if (!modifiers.scrollVelocities) continue;
+
+			note.visualTime = scrollVelocities.map.getPosition(note.time);
+			if (note.length > 0) {
+				var endTime = note.time + note.length;
+				note.visualEnd = scrollVelocities.map.getPosition(endTime);
+			}
 		}
 	}
 
@@ -313,7 +330,11 @@ class PlayField extends flixel.group.FlxGroup {
 			return;
 		}
 
-		sustain.timeOffset = -Math.min(sustain.adjustedTime - clock.time, 0);
+		// only clip if it's past the sustain
+		if (!modifiers.scrollVelocities)
+			sustain.timeOffset = -Math.min(sustain.adjustedTime - clock.time, 0);
+		else if (clock.time >= sustain.adjustedTime)
+			sustain.timeOffset = scrollVelocities.time - sustain.visualTime;
 		
 		sustain.forceHeightRecalc = true;
 		receptor.isHolding = true;

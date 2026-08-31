@@ -13,6 +13,7 @@ class Song {
 		return {
 			title: '',
 			timingPoints: [],
+			scrollVelocities: [],
 			notes: [],
 			speed: 1,
 			offset: 0

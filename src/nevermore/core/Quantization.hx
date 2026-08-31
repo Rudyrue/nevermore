@@ -91,6 +91,7 @@ class Quantization {
 		currentType = STEPMANIA;
 	}
 
+	// TODO: some chart formats reset their beat/quant after a timing point, so i gotta figure out a nice way to incorperate it
 	@:pure public static function getID(timeAt:Float, ?map:TimingMap):Int {
 		map ??= Conductor.timingMap;
 

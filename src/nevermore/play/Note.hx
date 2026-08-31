@@ -31,6 +31,7 @@ class Note extends flixel.FlxSprite {
 	public var sustain:Sustain;
 	public var quants:Bool;
 
+	public var visualTime:Float;
 	public var missed:Bool;
 	public var time:Float;
 	public var lane:Int;
@@ -134,6 +135,7 @@ class Note extends flixel.FlxSprite {
 
 		length = data.length;
 
+		visualTime = data.visualTime;
 		time = data.time;
 		lane = data.lane;
 		player = data.player;
@@ -151,6 +153,8 @@ class Note extends flixel.FlxSprite {
 	public function move(clock:BaseClock):Void {
 		alpha = receptor.alpha;
 		visible = receptor.visible;
+
+		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 
 		var deviation:Float = (adjustedTime - clock.time) + Nevermore.settings.visualOffset;
 		var adjustedSpeed:Float = (strumline.speed * strumline.pixelsPerMS);

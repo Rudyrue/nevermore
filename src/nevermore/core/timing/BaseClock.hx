@@ -7,6 +7,8 @@ class BaseClock {
 	public var songTime:Float;
 	public var time:Float;
 	public var timingMap:TimingMap;
+	
+	public var usesScrollVelocities:Bool = false;
 
 	public var active:Bool = true;
 	

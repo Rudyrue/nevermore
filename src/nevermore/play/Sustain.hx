@@ -41,6 +41,7 @@ class Sustain extends Note {
 	public var regrabTimer:Float;
 	public var regrabAlpha:Float;
 	public var untilTick:Float;
+	public var visualEnd:Float;
 	override function setup(strumline:Strumline, data:NoteData) {
 		super.setup(strumline, data);
 
@@ -53,6 +54,7 @@ class Sustain extends Note {
 		lastSustainScale = -1;
 		flipY = strumline.direction == DOWN;
 		timeOffset = 0;
+		visualEnd = data.visualEnd;
 
 		holdAnim = animation.getByName("piece");
 		tailAnim = animation.getByName("tail");
@@ -66,6 +68,8 @@ class Sustain extends Note {
 	override function move(clock:BaseClock) {
 		alpha = receptor.alpha;
 		visible = receptor.visible;
+
+		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 
 		var deviation:Float = ((adjustedTime - clock.time) + timeOffset) + Nevermore.settings.visualOffset;
 		var adjustedSpeed:Float = (strumline.speed * strumline.pixelsPerMS);
@@ -92,6 +96,7 @@ class Sustain extends Note {
 			lastScaleY = scale.y;
 			lastSustainScale = holdScale;
 
+			var length:Float = visualTime > 0 ? (visualEnd - visualTime) : length;
 			height = (length - timeOffset) * (holdScale * strumline.pixelsPerMS);
 		}
 	}
