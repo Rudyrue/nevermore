@@ -159,6 +159,18 @@ class Conductor extends flixel.FlxBasic {
 		// this still triggers ?????
 		// ok flixel
 		if (vocals == null || !vocals.playing) return;
+
+		// trying to sync vocals with streamed audio
+		// kinda       Doesn't work
+		// extremely laggy whenever unpausing and
+		// sometimes it'll just keep resyncing
+		// which sounds like shit and ruins fps
+		#if (lime >= version("8.4.0"))
+		@:privateAccess
+		var streamed:Bool = vocals._sound.__buffer.data == null;
+		if (streamed) return;
+		#end
+
 		if (Math.abs(inst.time - vocals.time) >= vocalReboundTime) {
 			vocals.time = inst.time;
 		}
