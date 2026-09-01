@@ -15,7 +15,8 @@ class Quantization {
 	public static final PURPLE:FlxColor = 0xFFC228FF;
 	public static final YELLOW:FlxColor = 0xFFFFE900;
 	public static final MAGENTA:FlxColor = 0xFFFF00CB;
-	public static final ORANGE:FlxColor = 0xFFFF9400;
+	public static final PINK:FlxColor = 0xFFFF91FF;
+	public static final ORANGE:FlxColor = 0xFFFF831E;
 	public static final TEAL:FlxColor = 0xFF00EDFF;
 	public static final GREEN:FlxColor = 0xFF3FFF3F;
 	public static final GRAY:FlxColor = 0xFF878787;
@@ -42,7 +43,7 @@ class Quantization {
 			PURPLE,  // 12th
 			YELLOW,  // 16th
 			GRAY,    // 20th 
-			MAGENTA, // 24th
+			PINK,    // 24th
 			ORANGE,  // 32nd
 			TEAL,    // 48th
 			GREEN,   // 64th
