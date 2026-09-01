@@ -192,7 +192,7 @@ class PlayField extends flixel.group.FlxGroup {
 		this.modifiers = {};
 		#end
 
-		if (chart.scrollVelocities.length == 0) {
+		if (chart.scrollVelocities.length <= 1) {
 			modifiers.scrollVelocities = false;
 		}
 
