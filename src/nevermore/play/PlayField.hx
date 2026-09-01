@@ -134,13 +134,13 @@ class PlayField extends flixel.group.FlxGroup {
 		// no need to update if there isn't even any players
 		if (strumlines.length <= 0) return;
 
-		#if !NEVERMORE_NO_MODCHARTS
-		if (modchart != null) modchart.update();
-		#end
-
 		if (modifiers.scrollVelocities) {
 			scrollVelocities.updateSVs(clock);
 		}
+
+		#if !NEVERMORE_NO_MODCHARTS
+		if (modchart != null) modchart.update();
+		#end
 
 		strumlines.update(delta);
 		spawner.update(clock);
@@ -191,6 +191,10 @@ class PlayField extends flixel.group.FlxGroup {
 		#else
 		this.modifiers = {};
 		#end
+
+		if (chart.scrollVelocities.length == 0) {
+			modifiers.scrollVelocities = false;
+		}
 
 		if (modifiers.scrollVelocities) {
 			scrollVelocities = new VelocityClock(chart.scrollVelocities);
