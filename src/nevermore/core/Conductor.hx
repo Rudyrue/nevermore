@@ -169,7 +169,7 @@ class Conductor extends flixel.FlxBasic {
 		#if (lime >= version("8.4.0"))
 		@:privateAccess
 		var streamed:Bool = vocals._sound.__buffer.data == null;
-		if (streamed) return;
+		if (streamed) vocalReboundTime = 30;
 		#end
 
 		if (Math.abs(inst.time - vocals.time) >= vocalReboundTime) {
