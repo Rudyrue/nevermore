@@ -143,7 +143,7 @@ class Note extends flixel.FlxSprite {
 		type = data.type;
 
 		#if !NEVERMORE_NO_QUANTIZATION
-		if (quants) color = Quantization.get(time);
+		if (quants) color = Quantization.current[data.quant];
 		#end
 
 		receptor = strumline.members[lane];

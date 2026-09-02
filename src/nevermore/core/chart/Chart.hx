@@ -13,4 +13,11 @@ class Chart {
 	var notes:Array<NoteData>;
 	var speed:Float;
 	var offset:Float;
+
+	/*
+		some formats (like quaver) reset quant
+		on a new bpm change
+		so we use this.
+	*/
+	var quantsRelativeToChanges:Bool;
 }

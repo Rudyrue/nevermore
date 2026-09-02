@@ -209,6 +209,7 @@ class PlayField extends flixel.group.FlxGroup {
 		for (i => note in chart.notes) {
 			noteCount[note.player]++;
 			note.beat = clock.timingMap.getBeat(note.time);
+			note.quant = Quantization.getID(note.time, Conductor.timingMap, chart.quantsRelativeToChanges);
 
 			if (i != 0) {
 				clearStackedNotes(list, note);

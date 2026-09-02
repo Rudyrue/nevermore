@@ -16,7 +16,8 @@ class Song {
 			scrollVelocities: [],
 			notes: [],
 			speed: 1,
-			offset: 0
+			offset: 0,
+			quantsRelativeToChanges: true
 		}
 	}
 }
