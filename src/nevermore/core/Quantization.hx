@@ -5,6 +5,7 @@ import nevermore.core.timing.TimingMap;
 #if !NEVERMORE_NO_QUANTIZATION
 enum abstract QuantType(String) from String to String {
 	var STEPMANIA = 'StepMania';
+	var ITG = 'In The Groove';
 	var ARROWVORTEX = 'ArrowVortex';
 	var CUSTOM = 'Custom';
 }
@@ -19,6 +20,8 @@ class Quantization {
 	public static final ORANGE:FlxColor = 0xFFFF831E;
 	public static final TEAL:FlxColor = 0xFF00EDFF;
 	public static final GREEN:FlxColor = 0xFF3FFF3F;
+	public static final LIME:FlxColor = 0xFFA5E123;
+	public static final TURQUOISE:FlxColor = 0xFF22E48F; // for itg but i decided teal looked better
 	public static final GRAY:FlxColor = 0xFF878787;
 
 	public static var current:Array<Int>;
@@ -35,6 +38,20 @@ class Quantization {
 			GRAY,    // 64th
 			GRAY,    // 96th
 			GRAY     // 192nd
+		],
+
+		'In The Groove' => [
+			RED,       // 4th
+			BLUE,      // 8th
+			PURPLE,    // 12th
+			GREEN,     // 16th
+			TEAL, // 20th 
+			TEAL, // 24th
+			ORANGE,    // 32nd
+			TEAL, // 48th
+			TEAL, // 64th
+			TEAL, // 96th
+			TEAL  // 192nd
 		],
 
 		'ArrowVortex' => [
