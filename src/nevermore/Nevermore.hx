@@ -29,6 +29,22 @@ class NevermoreSettings {
 	**/                                     
 	var visualOffset:Float = 0;
 
+	/**
+	 * The delay in the audio driver itself.
+	 * When audio is played, it doesn't play *exactly* when it should,
+	 * resulting in it playing a couple milliseconds later.
+	 * This causes the time of the sound object being slightly behind
+	 * than where the actual sound position is.
+	 * This variable accounts for that.
+	**/
+
+	// TODO (maybe):
+	// this variable doesn't actually do shit lol
+	// afaik getting audio driver offset is pretty much impossible on lime
+	// if it isn't maybe try and figure it out later ? i feel like this would
+	// be useful for hitsounds
+	var audioOffset:Float = 0.0;
+
 	#if !NEVERMORE_NO_QUANTIZATION
 	/**
 	 * Changes note colours to resemble what beat they are snapped at.
@@ -75,7 +91,7 @@ class Nevermore {
 		Assets.init();
 
 		FlxG.plugins.add(new Conductor());
-		Controls.bindKeys();
+		Controls.init();
 		Judgement.reset();
 
 		#if !NEVERMORE_NO_QUANTIZATION 

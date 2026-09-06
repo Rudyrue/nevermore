@@ -33,6 +33,8 @@ class PlayField extends flixel.group.FlxGroup {
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var spawner:NoteSpawner;
 
+	public var input:InputDirector;
+
 	// the note count corresponding to each strumline
 	// for example `noteCount[playerID]`
 	// or `noteCount[0]` is the strumline with an id of 0
@@ -126,8 +128,9 @@ class PlayField extends flixel.group.FlxGroup {
 		scrollSpeed = 1;
 		scrollDirection = UP;
 
-		Application.current.window.onKeyDown.add(keyPressed);
-		Application.current.window.onKeyUp.add(keyReleased);
+		input = new InputDirector();
+		input.onPress.add(pressed);
+		input.onRelease.add(released);
 	}
 
 	override function update(delta:Float):Void {
@@ -177,11 +180,10 @@ class PlayField extends flixel.group.FlxGroup {
 
 	override function destroy():Void {
 		super.destroy();
+
+		input.destroy();
 		spawner.destroy();
 		spawner = null;
-
-		Application.current.window.onKeyDown.remove(keyPressed);
-		Application.current.window.onKeyUp.remove(keyReleased);
 	}
 
 	public function load(chart:Chart #if !NEVERMORE_NO_PLAY_MODIFIERS , ?modifiers:GameplayModifiers #end) {
@@ -369,12 +371,11 @@ class PlayField extends flixel.group.FlxGroup {
 		sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
 	}
 
-	inline function keyPressed(key:KeyCode, _) {
+	inline function pressed(direction:Int) {
 		if (strumlines.length <= 0 || Nevermore.paused) return;
 		if (player.ai) return;
 
-		var direction:Int = Controls.keyID(key);
-		if (direction == -1 || held[direction]) return;
+		if (held[direction]) return;
 		held[direction] = true;
 
 		if (inputs(direction) != null) ghostTap(direction);
@@ -384,12 +385,10 @@ class PlayField extends flixel.group.FlxGroup {
 		}
 	}
 
-	inline function keyReleased(key:KeyCode, _) {
+	inline function released(direction:Int) {
 		if (strumlines.length <= 0) return;
 		if (player.ai) return;
 
-		var direction:Int = Controls.keyID(key);
-		if (direction == -1) return;
 		held[direction] = false;
 
 		function releaseReceptor(direction:Int, ?strumline:Int) {

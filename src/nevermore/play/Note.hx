@@ -94,16 +94,14 @@ class Note extends flixel.FlxSprite {
 		return (adjustedTime - clock.time) < -(Judgement.max.window + missPadding);
 	}
 
-	public var deviation(get, never):Float;
-	function get_deviation():Float {
+	public function getDeviation(?timestamp:Float = 0.0):Float {
 		var result:Float = adjustedTime - clock.time;
 
-		#if (lime >= version("8.4.0"))
-		// this doesn't seem to do much for lagspikes
-		// but i'll take it
-		var timestamp:Int = Application.current.window.onKeyDown.timestamp;
-		result -= timestamp - System.getTimer();
-		#end
+		if (timestamp > 0) {
+			// this doesn't seem to do much for lagspikes
+			// but i'll take it
+			result -= timestamp - System.getTimer();
+		}
 
 		// this is some schizo ass code but
 		// if i don't have this i get like -6 to -8 mean consistently
