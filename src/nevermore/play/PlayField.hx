@@ -14,6 +14,8 @@ import nevermore.play.Sustain;
 import nevermore.modchart.ModchartManager;
 #end
 
+// test
+
 // TODO:
 // maybe separate inputs into its own class ???
 // not really a priority since it's just to make
