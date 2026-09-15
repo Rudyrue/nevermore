@@ -22,6 +22,19 @@ class BaseClock {
 		measureHit = new FlxTypedSignal<Int -> Void>();
 	}
 
+	public function destroy() {
+		timingMap = null;
+
+		stepHit.destroy();
+		stepHit = null;
+
+		beatHit.destroy();
+		beatHit = null;
+
+		measureHit.destroy();
+		measureHit = null;
+	}
+
 	public var offset:Float;
 	#if FLX_PITCH 
 	public var rate:Float;
@@ -31,11 +44,10 @@ class BaseClock {
 		return rate = 1.0;
 	}
 	#end
-	public function reset(?timingPoints:Array<TimingPoint>, ?offset:Float) {
+	public function reset(?timingPoints:Array<TimingPoint>) {
 		audioTime = songTime = time = 0.0;
 		rate = 1.0;
 
-		this.offset = offset ?? 0;
 		timingMap.reset(timingPoints ?? []);
 
 		stepHit.removeAll();

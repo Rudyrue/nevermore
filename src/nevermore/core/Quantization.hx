@@ -13,6 +13,7 @@ import nevermore.core.timing.TimingMap;
 enum abstract QuantType(String) from String to String {
 	var STEPMANIA = 'StepMania';
 	var ITG = 'In The Groove';
+	var FFR = 'Flash Flash Revolution';
 	var ETTERNA = 'Etterna';
 	var ARROWVORTEX = 'ArrowVortex';
 	var CUSTOM = 'Custom';
@@ -29,7 +30,7 @@ class Quantization {
 	public static final TEAL:FlxColor = 0xFF00EDFF;
 	public static final GREEN:FlxColor = 0xFF3FFF3F;
 	public static final LIME:FlxColor = 0xFFA5E123;
-	public static final TURQUOISE:FlxColor = 0xFF22E48F; // for itg but i decided teal looked better
+	public static final WHITE:FlxColor = 0xFFFFFFFF;
 	public static final GRAY:FlxColor = 0xFF878787;
 
 	public static var current:Array<Int>;
@@ -74,6 +75,22 @@ class Quantization {
 			TEAL,   // 64th
 			TEAL,   // 96th
 			TEAL    // 192nd
+		],
+
+		// these probably aren't accurate ????
+		// i tried the best i could
+		'Flash Flash Revolution' => [
+			RED,
+			RED,
+			PURPLE,
+			BLUE,
+			WHITE,
+			PINK,
+			YELLOW,
+			ORANGE,
+			GREEN,
+			WHITE,
+			WHITE
 		],
 
 		'ArrowVortex' => [

@@ -2,12 +2,18 @@ package nevermore.core.timing;
 
 class VelocityClock extends BaseClock {
 	public var map:ScrollVelocityMap;
-	public function new(list:Array<ScrollVelocity>) {
+	public function new(?list:Array<ScrollVelocity>) {
 		super();
 		usesScrollVelocities = true;
 		map = new ScrollVelocityMap(list);
 
 		reset();
+	}
+
+	override function destroy() {
+		super.destroy();
+		map.destroy();
+		map = null;
 	}
 
 	override function update(_) {}

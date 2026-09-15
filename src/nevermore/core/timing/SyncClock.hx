@@ -1,8 +1,8 @@
 package nevermore.core.timing;
 
 class SyncClock extends BaseClock {
-	override function reset(?timingPoints:Array<TimingPoint>, ?offset:Float):Void {
-		super.reset(timingPoints, offset);
+	override function reset(?timingPoints:Array<TimingPoint>):Void {
+		super.reset(timingPoints);
 		_lastTime = 0;
 		_timeTicks = null;
 	}

@@ -5,6 +5,12 @@ class ScrollVelocityMap {
 	public var length:Int = 0;
 
 	public function new(list:Array<ScrollVelocity>) {
+		reset(list);
+	}
+
+	public function reset(?list:Array<ScrollVelocity>) {
+		list ??= [];
+		
 		length = list.length;
 		list.sort((a, b) -> return Std.int(a.time - b.time));
 
@@ -13,6 +19,11 @@ class ScrollVelocityMap {
 		}
 
 		this.list = list;
+	}
+
+	public function destroy() {
+		list.resize(0);
+		list = null;
 	}
 
 	public function get(time:Float):ScrollVelocity {
