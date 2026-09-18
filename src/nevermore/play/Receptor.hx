@@ -4,6 +4,7 @@ import flixel.graphics.frames.FlxFrame;
 #if !NEVERMORE_NO_MODCHARTS
 import nevermore.modchart.ModchartManager;
 #end
+import nevermore.play.note.Note;
 
 class Receptor extends flixel.FlxSprite {
 	public var lane:Int;
@@ -27,8 +28,8 @@ class Receptor extends flixel.FlxSprite {
 
 	public function glow(?name:String, ?note:Note) {
 		name ??= 'glow';
-		quants = note != null && note.quants;
-		color = quants ? note.color : FlxColor.WHITE;
+		//quants = note != null && note.quants;
+		//color = quants ? note.color : FlxColor.WHITE;
 
 		animation.play(name, true);
 		centerOffsets();

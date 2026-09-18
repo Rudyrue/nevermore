@@ -2,7 +2,7 @@ package nevermore.modchart.mods;
 
 import openfl.geom.ColorTransform;
 import flixel.graphics.frames.FlxFrame;
-import nevermore.play.Note;
+import nevermore.play.note.Note;
 import nevermore.play.Receptor;
 
 class ArrowPath extends BaseModifier {

@@ -1,4 +1,4 @@
-package nevermore.play;
+package nevermore.play.note;
 
 import flixel.FlxCamera;
 import flixel.animation.FlxAnimation;
@@ -29,20 +29,14 @@ class Sustain extends Note {
 		}
 	}
 
-	public static dynamic function makeType(sustain:Sustain, type:String) {}
-
-	override function set_type(v:String):String {
-		strumline.skin.applySustain(this);
-		makeType(sustain, v);
-		return type = v;
-	}
+	public var quants:Bool = false;
 
 	public var wasHit:Bool;
 	public var regrabTimer:Float;
 	public var regrabAlpha:Float;
 	public var untilTick:Float;
 	public var visualEnd:Float;
-	override function setup(strumline:Strumline, data:NoteData) {
+	override function setup(strumline:Strumline, data:NoteData):Note {
 		super.setup(strumline, data);
 
 		wasHit = false;
@@ -67,7 +61,6 @@ class Sustain extends Note {
 	public var timeOffset:Float;
 	override function move(clock:BaseClock) {
 		alpha = receptor.alpha;
-		visible = receptor.visible;
 
 		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 
@@ -124,7 +117,7 @@ class Sustain extends Note {
 		if (height == 0 || alpha == 0 || regrabAlpha <= 0)
 			return;
 
-		updateFrames(Conductor.time);
+		updateFrames(clock.time);
 
 		// super.draw();
 		for (camera in cameras) {
@@ -217,7 +210,7 @@ class Sustain extends Note {
 	static var curStealthColor:Vector3 = new Vector3();
 	static var nextStealthColor:Vector3 = new Vector3();
 	static var nextScale:FlxPoint = FlxPoint.get();
-	override function drawCrazy(modchart:ModchartManager, direction:ScrollDirection, field:Strumline) {
+	/*override function drawCrazy(modchart:ModchartManager, direction:ScrollDirection, field:Strumline) {
 		if (height == 0 || alpha == 0 || regrabAlpha <= 0)
 			return;
 
@@ -396,6 +389,6 @@ class Sustain extends Note {
 
 		scale.set(oldScaleX, oldScaleY);
 		colorTransform.alphaMultiplier = ogAlpha;
-	}
+	}*/
 	#end
 }

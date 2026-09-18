@@ -1,6 +1,5 @@
 package nevermore.play;
 
-import flixel.util.FlxSignal;
 import nevermore.core.NoteData;
 import nevermore.core.timing.BaseClock;
 

@@ -1,7 +1,7 @@
 package nevermore.modchart.mods;
 
 import flixel.math.FlxAngle;
-import nevermore.play.Note;
+import nevermore.play.note.Note;
 
 class Confusion extends BaseModifier {
 	var confusionX:ModifierValue = 0;

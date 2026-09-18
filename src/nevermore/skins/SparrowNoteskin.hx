@@ -1,6 +1,8 @@
 package nevermore.skins;
 
-import nevermore.play.*;
+import nevermore.play.note.Note;
+import nevermore.play.note.Sustain;
+import nevermore.play.Receptor;
 
 class SparrowNoteskin extends Noteskin implements INoteskin {
 	public function new() {

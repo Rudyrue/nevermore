@@ -8,8 +8,7 @@ import flixel.graphics.frames.FlxFrame;
 import flixel.FlxCamera;
 import openfl.geom.ColorTransform;
 import openfl.display.BlendMode;
-import nevermore.play.Strumline;
-import nevermore.play.PlayField;
+import nevermore.play.*;
 import nevermore.modchart.drawing.*;
 import nevermore.modchart.mods.*;
 import nevermore.modchart.timeline.*;
@@ -52,7 +51,7 @@ class ModchartManager {
 
 	public var timeline:ModchartTimeline;
 	public var strumlineCount:Int = 0;
-	public var parent:PlayField;
+	public var parent:BaseField;
 	public var laneCount:Int = 4;
 	public var curLane:Int = 0;
 	public var curField:Int = 0;

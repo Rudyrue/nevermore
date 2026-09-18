@@ -1,8 +1,7 @@
 package nevermore.modchart;
 
 #if !NEVERMORE_NO_MODCHARTS
-import nevermore.play.PlayField;
-import nevermore.play.Strumline;
+import nevermore.play.*;
 import nevermore.modchart.ModchartManager;
 
 /*@:structInit class SetPrep {
@@ -15,8 +14,8 @@ import nevermore.modchart.ModchartManager;
 class BaseModifier {
 	public var parent:ModchartManager;
 	
-	public var grandparent(get, null):PlayField; // funny
-	function get_grandparent()return parent.parent;
+	public var grandparent(get, null):BaseField; // funny
+	function get_grandparent() return parent.parent;
 	
 	public var priority:Int = 0;
 	public var active:Array<Bool> = [];

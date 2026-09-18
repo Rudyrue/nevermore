@@ -2,8 +2,7 @@ package nevermore.skins;
 
 import flixel.graphics.frames.FlxAtlasFrames;
 import nevermore.play.Receptor;
-import nevermore.play.Note;
-import nevermore.play.Sustain;
+import nevermore.play.note.*;
 
 // TODO:
 // this entire fucking system probably lmfao

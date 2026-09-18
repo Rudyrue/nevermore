@@ -87,7 +87,6 @@ class Nevermore {
 		if (initialized) return;
 		initialized = true;
 
-		AudioManager.init();
 		Assets.init();
 
 		FlxG.plugins.add(new Conductor());

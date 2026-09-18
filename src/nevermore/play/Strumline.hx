@@ -3,6 +3,7 @@ package nevermore.play;
 import flixel.group.FlxSpriteGroup;
 import nevermore.skins.Noteskin;
 import nevermore.play.Strumline;
+import nevermore.play.note.Sustain;
 
 class Strumline extends FlxTypedSpriteGroup<Receptor> {
 	public var keyCount(default, set):Int = Nevermore.keyCount;

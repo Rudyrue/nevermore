@@ -1,4 +1,4 @@
-package nevermore.play;
+package nevermore.input;
 
 import lime.app.Application;
 import lime.app.Event;
@@ -19,7 +19,6 @@ class InputDirector {
 		onRelease = new Event<Int -> Void>();
 
 		Gamepad.onConnect.add(_onConnectGamepad);
-
 		_addGamepad(Gamepad.devices[0]);
 
 		Application.current.window.onKeyDown.add(keyPressed);

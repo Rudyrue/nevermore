@@ -1,6 +1,6 @@
 package flixel.graphics.tile;
 
-import nevermore.play.Note;
+import nevermore.play.note.Note;
 import nevermore.backend.Vector3;
 
 import openfl.Vector;

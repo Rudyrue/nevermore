@@ -13,7 +13,7 @@ class GameplayModifiers {
 	#else
 
 	var sustains:Bool = true;
-	var scrollVelocities:Bool = true;
+	var scrollVelocities:Bool = false;
 	var randomizedNotes:Bool = false;
 	var mirroredNotes:Bool = false;
 	

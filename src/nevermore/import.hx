@@ -10,8 +10,7 @@ import flixel.util.FlxColor;
 import nevermore.audio.*;
 import nevermore.backend.*;
 import nevermore.core.*;
-import nevermore.core.input.*;
-import nevermore.core.input.Controls.ListenerType;
+import nevermore.input.*;
 import nevermore.Nevermore;
 
 import sys.FileSystem;
