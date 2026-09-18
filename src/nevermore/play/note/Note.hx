@@ -37,9 +37,9 @@ class Note extends BaseNote {
 		this.strumline = strumline;
 		this._data = data;
 
-		behavior.reset(this);
 		multAlpha = 1;
-
+		behavior.reset(this);
+		
 		visualTime = data.visualTime;
 		time = data.time;
 		lane = data.lane;
