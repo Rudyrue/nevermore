@@ -16,7 +16,10 @@ class BaseField extends FlxSpriteGroup {
 		return clock;
 	}
 
-	public var playerID:Int = 0;
+	public var playerID(default, set):Int = 0;
+	function set_playerID(v:Int):Int {
+		return playerID = v;
+	}
 
 	public var scrollSpeed(default, set):Float;
 	function set_scrollSpeed(v:Float):Float {
@@ -28,14 +31,18 @@ class BaseField extends FlxSpriteGroup {
 		return scrollDirection = v;
 	}
 
-	public var autoplay:Bool = false;
+	public var autoplay(default, set):Bool = false;
+	function set_autoplay(v:Bool):Bool {
+		return autoplay = v;
+	}
+
 	public var scrollVelocities:Bool = true;
 
 	public var spawner:NoteSpawner;
 	public var velocityClock:VelocityClock;
 	public var modchart:ModchartManager;
 
-	public var director:InputDirector;
+	public var input:InputManager;
 
 	public function getStrumline(id:Int):Strumline {
 		return null;
@@ -47,12 +54,12 @@ class BaseField extends FlxSpriteGroup {
 	public function new() {
 		super();
 
-		director = new InputDirector();
+		input = new InputManager();
 		spawner = new NoteSpawner();
 		velocityClock = new VelocityClock();
 
-		director.onPress.add(pressed);
-		director.onRelease.add(released);
+		input.onPress.add(pressed);
+		input.onRelease.add(released);
 
 		scrollSpeed = 1.0;
 		scrollDirection = UP;
@@ -70,12 +77,12 @@ class BaseField extends FlxSpriteGroup {
 	override function destroy():Void {
 		super.destroy();
 
-		director.destroy();
+		input.destroy();
 		spawner.destroy();
 		velocityClock.destroy();
 
 		spawner = null;
-		director = null;
+		input = null;
 		velocityClock = null;
 	}
 
@@ -83,10 +90,12 @@ class BaseField extends FlxSpriteGroup {
 		modifiers ??= {};
 		if (chart.scrollVelocities.length <= 1) {
 			scrollVelocities = false;
-		}
+		} else velocityClock.map.reset(chart.scrollVelocities);
 
 		var map:TimingMap = clock.timingMap;
 		clock.offset = chart.offset;
+
+		applyModifiers(chart, modifiers);
 
 		var list:Array<NoteData> = [];
 		for (i => note in chart.notes) {
@@ -103,6 +112,23 @@ class BaseField extends FlxSpriteGroup {
 		
 		spawner.load(list);
 		spawner.triggered = noteSpawned;
+	}
+
+	function applyModifiers(chart:Chart, modifiers:GameplayModifiers) {
+		var lanes:Array<Int> = modifiers.mirroredNotes ? [3, 2, 1, 0] : [0, 1, 2, 3];
+		if (modifiers.randomizedNotes) FlxG.random.shuffle(lanes);
+
+		for (note in chart.notes) {
+			note.lane = lanes[note.lane];
+			if (!modifiers.sustains) note.length = 0;
+			if (!modifiers.scrollVelocities) continue;
+
+			note.visualTime = velocityClock.map.getPosition(note.time);
+			if (note.length > 0) {
+				var endTime = note.time + note.length;
+				note.visualEnd = velocityClock.map.getPosition(endTime);
+			}
+		}
 	}
 
 	// TODO:

@@ -9,7 +9,7 @@ import lime.system.System;
 
 // combines keyboard/gamepad input into one callback
 // and converts the input into a 0 - keyCount integer
-class InputDirector {
+class InputManager {
 	public var onPress:Event<Int -> Void>;
 	public var onRelease:Event<Int -> Void>;
 	public var timestamp:Int = 0;

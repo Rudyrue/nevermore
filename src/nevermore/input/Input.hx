@@ -1,8 +1,6 @@
 package nevermore.input;
 
-import lime.ui.KeyCode;
-
-class InputHandler {
+class Input {
 	public function new(binds:Map<Int, Array<InputType>>) {
 		default_binds = binds.copy();
 		this.binds = [

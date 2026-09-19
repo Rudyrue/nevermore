@@ -87,13 +87,13 @@ class NoteField extends BaseField {
 	override function pressed(direction:Int) {
 		if (Nevermore.paused) return;
 
-		inputs(direction, playerID);
+		tapInputs(direction, playerID);
 	}
 
 	// you don't have to do inputs like this
 	// a simple sort and then list[0] should do the job 
 	// but for something this caliber it needs to handle it a bit more accurately
-	function inputs(direction:Int, ?id:Int):Note {
+	function tapInputs(direction:Int, ?id:Int):Note {
 		id ??= playerID;
 
 		var strumline = getStrumline(id);
