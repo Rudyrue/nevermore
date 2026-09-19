@@ -1,6 +1,7 @@
 package nevermore.play;
 
 import flixel.group.FlxSpriteGroup;
+import flixel.FlxCamera;
 import nevermore.play.note.*;
 
 class NoteField extends BaseField {
@@ -8,7 +9,11 @@ class NoteField extends BaseField {
 	public var strumlines:FlxTypedSpriteGroup<Strumline>;
 	public var notes:FlxTypedSpriteGroup<Note>;
 
-	public var player:Strumline;
+	public dynamic function noteHit(strumline:Strumline, note:Note):Void {}
+	public dynamic function noteMiss(strumline:Strumline, note:Note):Void {}
+	public dynamic function sustainHit(strumline:Strumline, note:Sustain, mostRecent:Bool):Void {}
+	public dynamic function ghostTap(strumline:Strumline, dir:Int):Void {}
+
 	override function set_playerID(v:Int):Int {
 		v = FlxMath.minInt(v, strumlines.length - 1);
 
@@ -16,8 +21,11 @@ class NoteField extends BaseField {
 			line.ai = (v == i) ? autoplay : true;
 		}
 
-		player = getStrumline(v);
 		return playerID = v;
+	}
+
+	override function set_autoplay(v:Bool):Bool {
+		return autoplay = getStrumline(playerID).ai = v;
 	}
 
 	override function set_scrollSpeed(v:Float):Float {
@@ -27,7 +35,10 @@ class NoteField extends BaseField {
 
 		for (sustain in sustains.members) {
 			sustain.forceHeightRecalc = true;
-			sustain.calcHeight(v / clock.rate);
+
+			var speed:Float = v / clock.rate;
+			var longHolds:Float = modchart == null ? 1 : (modchart.get('longholds', sustain.player) + 1);
+			sustain.calcHeight(speed * longHolds);
 		}
 
 		return scrollSpeed = v;
@@ -72,11 +83,12 @@ class NoteField extends BaseField {
 
 		for (i in 0 ... notes.length) {
 			var note:Note = notes.members[i];
+			
+			if (!note.passedStrumline) checkAssistTick(note);
 			if (!note.exists) continue;
 
 			note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
-			if (!note.passedStrumline) checkAssistTick(note);
 
 			// should probably move this to a separate function later
 			if (note.strumline.ai && note.adjustedTime - clock.time <= 0) {
@@ -141,23 +153,30 @@ class NoteField extends BaseField {
 		var note = addNote(data, notes, Note);
 		if (data.length > 0) {
 			var sustain = addNote(data, sustains, Sustain);
-			sustain.calcHeight(sustain.strumline.speed / clock.rate);
+
+			var speed:Float = sustain.strumline.speed / clock.rate;
+			var longHolds:Float = modchart == null ? 1 : (modchart.get('longholds', data.player) + 1);
+			sustain.calcHeight(speed * longHolds);
 
 			note.sustain = sustain;
 		}
 	}
 
 	var held:Array<Bool> = [for (i in 0...Nevermore.keyCount) false];
+	var mirrorInputs:Array<Int> = [];
 	override function pressed(direction:Int) {
-		if (Nevermore.paused) return;
+		if (autoplay || Nevermore.paused) return;
 
 		if (held[direction]) return;
 		held[direction] = true;
 
 		tapInputs(direction, playerID);
+		for (i in mirrorInputs) tapInputs(direction, i);
 	}
 
 	override function released(direction:Int) {
+		if (autoplay) return;
+
 		held[direction] = false;
 	}
 
@@ -275,5 +294,54 @@ class NoteField extends BaseField {
 			receptor.glow(null, sustain);*/
 
 		//sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
+	}
+
+	override function draw():Void {
+		if (modchart == null) {
+			super.draw();
+			return;
+		}
+
+		modchart.prepare();
+
+		var oldDefaultCameras = null;
+		@:privateAccess {
+			oldDefaultCameras = FlxCamera._defaultCameras;
+			if (cameras != null)
+				FlxCamera._defaultCameras = cameras;
+		}
+
+		for (i => strumline in strumlines.members) {
+			if (!strumline.visible) continue;
+
+			for (strum in strumline.members) {
+				if (!strum.visible) continue;
+				strum.preDrawCrazy(modchart, i, strumline.direction);
+			}
+		}
+
+		for (sustain in sustains.members) {
+			if (!sustain.exists || !sustain.visible) continue;
+
+			sustain.drawCrazy(modchart, sustain.strumline.direction);
+		}
+
+		for (i => strumline in strumlines.members) {
+			if (!strumline.visible) continue;
+
+			for (strum in strumline.members) {
+				if (!strum.visible) continue;
+				strum.drawCrazy(modchart, i, strumline.direction);
+			}
+		}
+
+		for (note in notes.members) {
+			if (!note.exists || !note.visible) continue;
+
+			note.drawCrazy(modchart, note.strumline.direction);
+		}
+
+		modchart.drawQueues();
+		@:privateAccess FlxCamera._defaultCameras = oldDefaultCameras;
 	}
 }

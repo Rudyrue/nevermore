@@ -400,8 +400,7 @@ class ModchartManager {
 		return stealth;
 	}
 
-
-	public function pushDraw(strumline:Int, field:Strumline, cameras:Array<FlxCamera>, scroll:FlxPoint, frame:FlxFrame, vertices:Array<Vector3>, transform:ColorTransform, blend:BlendMode, antialiasing:Bool, luminColors:Bool, stealth:Float, layer:Float, isStrum:Bool = false) {
+	public function pushDraw(strumline:Int, field:Strumline, cameras:Array<FlxCamera>, scroll:FlxPoint, frame:FlxFrame, vertices:Array<Vector3>, transform:ColorTransform, blend:BlendMode, antialiasing:Bool, quants:Bool, stealth:Float, layer:Float, isStrum:Bool = false) {
 		final halfWidth = FlxG.width * 0.5;
 		final halfHeight = FlxG.height * 0.5;
 
@@ -424,7 +423,7 @@ class ModchartManager {
 			queuedDraws.push({
 				layer: layer + proxy.layer,
 
-				luminColors: luminColors,
+				quants: quants,
 				blend: blend,
 				antialiasing: antialiasing,
 
@@ -457,7 +456,7 @@ class ModchartManager {
 		queuedDraws.push({
 			layer: layer,
 
-			luminColors: luminColors,
+			quants: quants,
 			blend: blend,
 			antialiasing: antialiasing,
 
@@ -499,7 +498,7 @@ class ModchartManager {
 				if (minX <= camera.viewMarginRight && maxX >= camera.viewMarginLeft && minY <= camera.viewMarginBottom && maxY >= camera.viewMarginTop) {
 					stealthColor.set(queue.stealthGR, queue.stealthGG, queue.stealthGB);
 					drawColor.setMultipliers(queue.red, queue.green, queue.blue, 1);
-					camera.drawNoteVertices(queue.frame, queue.verts, drawColor, queue.blend, queue.antialiasing, queue.luminColors, queue.stealth, queue.alpha, stealthColor);
+					camera.drawNoteVertices(queue.frame, queue.verts, drawColor, queue.blend, queue.antialiasing, queue.quants, queue.stealth, queue.alpha, stealthColor);
 				}
 
 				for (i in 0...4) {

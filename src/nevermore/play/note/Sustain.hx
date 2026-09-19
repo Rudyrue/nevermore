@@ -222,8 +222,8 @@ class Sustain extends Note {
 	static var curStealthColor:Vector3 = new Vector3();
 	static var nextStealthColor:Vector3 = new Vector3();
 	static var nextScale:FlxPoint = FlxPoint.get();
-	/*override function drawCrazy(modchart:ModchartManager, direction:ScrollDirection, field:Strumline) {
-		if (height == 0 || alpha == 0 || regrabAlpha <= 0)
+	override function drawCrazy(modchart:ModchartManager, direction:ScrollDirection) {
+		if (height == 0 || alpha <= 0 || regrabAlpha <= 0)
 			return;
 
 		final ogAlpha = colorTransform.alphaMultiplier;
@@ -248,15 +248,15 @@ class Sustain extends Note {
 		var curDist = distance * yMult;
 		var curY = 0.0;
 
-		updateFrames(Conductor.time);
+		updateFrames(clock.time);
 		
-		var newDist:Float = modchart.adjustDistance(this, curDist, lane, player, field, SUSTAIN);
+		var newDist:Float = modchart.adjustDistance(this, curDist, lane, player, strumline, SUSTAIN);
 		final rawY:Float = (y - distance);
 		final newY:Float = rawY + (newDist * yMult);
 		modchartPos.set(x, newY, 0);
 		modchart.scrollMult = yMult;
-		modchart.adjustPos(this, modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
-		modchart.adjustScale(this, scale, newDist, lane, player, field, SUSTAIN);
+		modchart.adjustPos(this, modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
+		modchart.adjustScale(this, scale, newDist, lane, player, strumline, SUSTAIN);
 
 		final baseX:Float = modchartPos.x;
 		final baseZ:Float = modchartPos.z;
@@ -274,21 +274,21 @@ class Sustain extends Note {
 		inline function getNextPos() {
 			--rects;
 			modchart.stealthColor.set(1.0, 1.0, 1.0);
-			stealth = modchart.getStealth(this, newDist, curDist, modchartPos, lane, player, field, SUSTAIN);
+			stealth = modchart.getStealth(this, newDist, curDist, modchartPos, lane, player, strumline, SUSTAIN);
 			nextStealthColor.copyFrom(modchart.stealthColor);
 
 			final height:Float = (rects == 0) ? Math.min(Math.abs(height), backupTailHeight) : ((rects == sustainDivisions) ? backupHoldHeight - sustainTopY : backupHoldHeight) * Nevermore.settings.holdGrain;
 			curY += height * oldScaleY * yMult;
 			curDist = (distance + curY) * yMult;
 
-			final newDist: Float = modchart.adjustDistance(this, curDist, lane, player, field, SUSTAIN);
+			final newDist: Float = modchart.adjustDistance(this, curDist, lane, player, strumline, SUSTAIN);
 			final newY: Float = rawY + (newDist * yMult);
 
 			modchartPosLow.set(x, newY, 0);
 			nextScale.set(oldScaleX, oldScaleY);
 			modchart.scrollMult = yMult;
-			modchart.adjustPos(this, modchartPosLow, newDist, curDist, lane, player, field, SUSTAIN);
-			modchart.adjustScale(this, nextScale, curDist, lane, player, field, SUSTAIN);
+			modchart.adjustPos(this, modchartPosLow, newDist, curDist, lane, player, strumline, SUSTAIN);
+			modchart.adjustScale(this, nextScale, curDist, lane, player, strumline, SUSTAIN);
 			
 			modchartPosLow.set(
 				FlxMath.lerp(modchartPosLow.x, baseX, sexuality),
@@ -319,14 +319,14 @@ class Sustain extends Note {
 			modchartPos.y + offsetY,
 			modchartPos.z
 		);
-		modchart.adjustVertex(this, Note.modchartVertices[0], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+		modchart.adjustVertex(this, Note.modchartVertices[0], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[0].project();
 		Note.modchartVertices[1].set(
 			modchartPos.x + offsetX,
 			modchartPos.y - offsetY,
 			modchartPos.z
 		);
-		modchart.adjustVertex(this, Note.modchartVertices[1], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+		modchart.adjustVertex(this, Note.modchartVertices[1], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[1].project();
 
 		angleUp = angleDown;
@@ -348,18 +348,18 @@ class Sustain extends Note {
 				modchartPos.y + offsetY,
 				modchartPos.z
 			);
-			modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+			modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 			Note.modchartVertices[2].project();
 			Note.modchartVertices[3].set(
 				modchartPos.x + offsetX,
 				modchartPos.y - offsetY,
 				modchartPos.z
 			);
-			modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+			modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 			Note.modchartVertices[3].project();
 
 			modchart.stealthColor.copyFrom(curStealthColor);
-			modchart.pushDraw(player, field, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
+			modchart.pushDraw(player, strumline, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
 			modchart.stealthColor.copyFrom(nextStealthColor);
 
 			Note.modchartVertices[0].copyFrom(Note.modchartVertices[2]);
@@ -384,23 +384,23 @@ class Sustain extends Note {
 			modchartPos.y + offsetY,
 			modchartPos.z
 		);
-		modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+		modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[2].project();
 		Note.modchartVertices[3].set(
 			modchartPos.x + offsetX,
 			modchartPos.y - offsetY,
 			modchartPos.z
 		);
-		modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
+		modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[3].project();
 
-		modchart.pushDraw(player, field, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
+		modchart.pushDraw(player, strumline, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
 
 		tailFrame.frame.y = backupTailY;
 		tailFrame.frame.height = backupTailHeight;
 
 		scale.set(oldScaleX, oldScaleY);
 		colorTransform.alphaMultiplier = ogAlpha;
-	}*/
+	}
 	#end
 }

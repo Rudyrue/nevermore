@@ -104,7 +104,5 @@ class BaseNote extends FlxSprite {
 		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quantization);
 	}
 
-	public function drawCrazy(modchart:ModchartManager, direction:ScrollDirection, strumline:Strumline) {
-
-	}
+	public function drawCrazy(modchart:ModchartManager, direction:ScrollDirection) {}
 }

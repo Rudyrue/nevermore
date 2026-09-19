@@ -75,7 +75,7 @@ class Receptor extends flixel.FlxSprite {
 	public var stealth:Float = 0;
 	public var stealthColor:Vector3 = new Vector3();
 
-	public function preDrawCrazy(modchart:ModchartManager, player:Int, direction:ScrollDirection, field:Strumline) {
+	public function preDrawCrazy(modchart:ModchartManager, player:Int, direction:ScrollDirection) {
 		modchart.curLane = lane;
 		modchart.curField = player;
 
@@ -85,21 +85,21 @@ class Receptor extends flixel.FlxSprite {
 		modchart.stealthColor.set(1.0, 1.0, 1.0);
 		modchart.scrollMult = mult;
 
-		modchartDist = modchart.adjustDistance(this, 0, lane, player, field, RECEPTOR);
+		modchartDist = modchart.adjustDistance(this, 0, lane, player, parent, RECEPTOR);
 		modchartPos.set(x + width * 0.5, y + height * 0.5 + (modchartDist * mult), 0);
-		modchart.adjustPos(this, modchartPos, modchartDist, 0, lane, player, field, RECEPTOR);
-		modchart.adjustScale(this, scale, modchartDist, lane, player, field, RECEPTOR);
-		stealth = modchart.getStealth(this, modchartDist, 0, modchartPos, lane, player, field, RECEPTOR);
+		modchart.adjustPos(this, modchartPos, modchartDist, 0, lane, player, parent, RECEPTOR);
+		modchart.adjustScale(this, scale, modchartDist, lane, player, parent, RECEPTOR);
+		stealth = modchart.getStealth(this, modchartDist, 0, modchartPos, lane, player, parent, RECEPTOR);
 		
 		scrollMult = modchart.scrollMult;
 		stealthColor.copyFrom(modchart.stealthColor);
 	}
 
-	public function drawCrazy(modchart:ModchartManager, player:Int, direction:ScrollDirection, field:Strumline) {
+	public function drawCrazy(modchart:ModchartManager, player:Int, direction:ScrollDirection) {
 		modchart.curLane = lane;
 		modchart.curField = player;
 		if (modchart.arrowPath != null)
-			modchart.arrowPath.drawPath(this, player, direction, field);
+			modchart.arrowPath.drawPath(this, player, direction, parent);
 
 		final oldX = x;
 		final oldY = y;
@@ -129,7 +129,7 @@ class Receptor extends flixel.FlxSprite {
 			final cacheZ:Float = modchartPos.z;
 			final mult: Float = direction == DOWN ? -1 : 1;
 			modchartPos.set(x + width * 0.5, y + (height * 0.5) + ((modchartDist + 2) * mult), 0);
-			modchart.adjustPos(this, modchartPos, modchartDist + 2, 2, lane, player, field, RECEPTOR);
+			modchart.adjustPos(this, modchartPos, modchartDist + 2, 2, lane, player, parent, RECEPTOR);
 
 			Note.cachePoint.set(modchartPos.x - cacheX, modchartPos.y - cacheY);
 			Note.cachePoint.rotateByDegrees(orientOffset);
@@ -150,11 +150,11 @@ class Receptor extends flixel.FlxSprite {
 		}
 
 		for (vert in Note.modchartVertices) {
-			modchart.adjustVertex(this, vert, modchartPos, modchartDist, 0, lane, player, field, RECEPTOR);
+			modchart.adjustVertex(this, vert, modchartPos, modchartDist, 0, lane, player, parent, RECEPTOR);
 			vert.project();
 		}
 
-		modchart.pushDraw(player, field, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, quants, stealth, layer, true);
+		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, quants, stealth, layer, true);
 	}
 	#end
 }
