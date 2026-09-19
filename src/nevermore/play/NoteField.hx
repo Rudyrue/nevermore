@@ -108,9 +108,10 @@ class NoteField extends BaseField {
 	}
 
 	function checkAssistTick(note:Note) {
-		if (note.player != playerID || note.time - clock.time > 0) return;
-
+		if (note.time - clock.time > 0) return;
 		note.passedStrumline = true;
+
+		if (note.player != playerID) return;
 
 		var behavior:NoteBehavior = note.behavior;
 		if (!behavior.hittable || behavior.punishable) return;
