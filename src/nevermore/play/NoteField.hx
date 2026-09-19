@@ -8,6 +8,18 @@ class NoteField extends BaseField {
 	public var strumlines:FlxTypedSpriteGroup<Strumline>;
 	public var notes:FlxTypedSpriteGroup<Note>;
 
+	public var player:Strumline;
+	override function set_playerID(v:Int):Int {
+		v = FlxMath.minInt(v, strumlines.length - 1);
+
+		for (i => line in strumlines.members) {
+			line.ai = (v == i) ? autoplay : true;
+		}
+
+		player = getStrumline(v);
+		return playerID = v;
+	}
+
 	override function set_scrollSpeed(v:Float):Float {
 		for (line in strumlines.members) {
 			line.speed = v;
@@ -61,6 +73,14 @@ class NoteField extends BaseField {
 
 			note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
+
+			// should probably move this to a separate function later
+			if (note.strumline.ai && note.adjustedTime - clock.time <= 0) {
+				note.kill();
+				if (note.sustain != null) {
+					note.sustain.wasHit = true;
+				}
+			}
 
 			if (note.adjustedTime < clock.time - killDelay) {
 				note.kill();
