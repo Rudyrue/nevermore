@@ -400,19 +400,19 @@ class ModchartManager {
 		return stealth;
 	}
 
-	public function pushDraw(strumline:Int, field:Strumline, cameras:Array<FlxCamera>, scroll:FlxPoint, frame:FlxFrame, vertices:Array<Vector3>, transform:ColorTransform, blend:BlendMode, antialiasing:Bool, quants:Bool, stealth:Float, layer:Float, isStrum:Bool = false) {
+	public function pushDraw(player:Int, strumline:Strumline, cameras:Array<FlxCamera>, scroll:FlxPoint, frame:FlxFrame, vertices:Array<Vector3>, transform:ColorTransform, blend:BlendMode, antialiasing:Bool, quantization:Bool, stealth:Float, layer:Float, isStrum:Bool = false) {
 		final halfWidth = FlxG.width * 0.5;
 		final halfHeight = FlxG.height * 0.5;
 
 		// TODO: Move this into the stealth modifier so we can add hidesuddenglow and hidehiddenglow from nITG
 		var stealthAlpha:Float = 1;
-		if (!isStrum && get("hidestealthglow", strumline) == 1 || isStrum && get("hidedarkglow", strumline) == 1) {
+		if (!isStrum && get("hidestealthglow", player) == 1 || isStrum && get("hidedarkglow", player) == 1) {
 			stealthAlpha = 1 - stealth;
 			stealth = 0;
 		}
 
 		for (proxy in proxies) {
-			if (proxy.targetIdx != strumline || !proxy.visible || proxy.alpha <= 0.0) continue;
+			if (proxy.targetIdx != player || !proxy.visible || proxy.alpha <= 0.0) continue;
 
 			final verts:Array<Float> = [];
 			for (vert in vertices) {
@@ -423,7 +423,7 @@ class ModchartManager {
 			queuedDraws.push({
 				layer: layer + proxy.layer,
 
-				quants: quants,
+				quantization: quantization,
 				blend: blend,
 				antialiasing: antialiasing,
 
@@ -445,18 +445,18 @@ class ModchartManager {
 			});
 		}
 
-		if (field.modchartAlpha <= 0.0) return;
+		if (strumline.modchartAlpha <= 0.0) return;
 
 		final verts:Array<Float> = [];
 		for (vert in vertices) {
-			verts.push(vert.x + field.modchartX);
-			verts.push(vert.y + field.modchartY);
+			verts.push(vert.x + strumline.modchartX);
+			verts.push(vert.y + strumline.modchartY);
 		}
 
 		queuedDraws.push({
 			layer: layer,
 
-			quants: quants,
+			quantization: quantization,
 			blend: blend,
 			antialiasing: antialiasing,
 
@@ -470,7 +470,7 @@ class ModchartManager {
 			red: transform.redMultiplier,
 			green: transform.greenMultiplier,
 			blue: transform.blueMultiplier,
-			alpha: transform.alphaMultiplier * field.modchartAlpha * stealthAlpha,
+			alpha: transform.alphaMultiplier * strumline.modchartAlpha * stealthAlpha,
 			stealth: stealth,
 			stealthGR: stealthColor.x,
 			stealthGG: stealthColor.y,
@@ -498,7 +498,7 @@ class ModchartManager {
 				if (minX <= camera.viewMarginRight && maxX >= camera.viewMarginLeft && minY <= camera.viewMarginBottom && maxY >= camera.viewMarginTop) {
 					stealthColor.set(queue.stealthGR, queue.stealthGG, queue.stealthGB);
 					drawColor.setMultipliers(queue.red, queue.green, queue.blue, 1);
-					camera.drawNoteVertices(queue.frame, queue.verts, drawColor, queue.blend, queue.antialiasing, queue.quants, queue.stealth, queue.alpha, stealthColor);
+					camera.drawNoteVertices(queue.frame, queue.verts, drawColor, queue.blend, queue.antialiasing, queue.quantization, queue.stealth, queue.alpha, stealthColor);
 				}
 
 				for (i in 0...4) {

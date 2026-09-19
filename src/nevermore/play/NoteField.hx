@@ -11,7 +11,8 @@ class NoteField extends BaseField {
 
 	public dynamic function noteHit(strumline:Strumline, note:Note):Void {}
 	public dynamic function noteMiss(strumline:Strumline, note:Note):Void {}
-	public dynamic function sustainHit(strumline:Strumline, note:Sustain, mostRecent:Bool):Void {}
+	public dynamic function sustainHit(strumline:Strumline, sustain:Sustain, mostRecent:Bool):Void {}
+	public dynamic function sustainDropped(strumline:Strumline, sustain:Sustain):Void {}
 	public dynamic function ghostTap(strumline:Strumline, dir:Int):Void {}
 
 	override function set_playerID(v:Int):Int {
@@ -83,7 +84,7 @@ class NoteField extends BaseField {
 
 		for (i in 0 ... notes.length) {
 			var note:Note = notes.members[i];
-			
+
 			if (!note.passedStrumline) checkAssistTick(note);
 			if (!note.exists) continue;
 
@@ -91,11 +92,16 @@ class NoteField extends BaseField {
 			note.move(scrollVelocities ? velocityClock : clock);
 
 			// should probably move this to a separate function later
-			if (note.strumline.ai && note.adjustedTime - clock.time <= 0) {
-				note.kill();
-				if (note.sustain != null) {
-					note.sustain.wasHit = true;
+			if (note.strumline.ai) {
+				if (note.adjustedTime - clock.time <= 0) {
+					note.kill();
+					if (note.sustain != null) {
+						note.sustain.wasHit = true;
+					}
 				}
+			} else if (!note.missed && !note.behavior.ignore && note.behavior.late) {
+				note.missed = true;
+				noteMiss(note.strumline, note);
 			}
 
 			if (note.adjustedTime < clock.time - killDelay) {
@@ -103,7 +109,7 @@ class NoteField extends BaseField {
 			}
 		}
 
-		for (i in 0...sustains.length) {
+		for (i in 0 ... sustains.length) {
 			var sustain:Sustain = sustains.members[i];
 			if (!sustain.exists) continue;
 
@@ -170,7 +176,13 @@ class NoteField extends BaseField {
 		if (held[direction]) return;
 		held[direction] = true;
 
-		tapInputs(direction, playerID);
+		var note:Note = tapInputs(direction, playerID);
+		if (note == null) {
+			ghostTap(getStrumline(playerID), direction);
+		} else {
+			noteHit(note.strumline, note);
+		}
+
 		for (i in mirrorInputs) tapInputs(direction, i);
 	}
 

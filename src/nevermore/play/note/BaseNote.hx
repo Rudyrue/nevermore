@@ -29,6 +29,7 @@ class BaseNote extends FlxSprite {
 	public var length:Float = 0.0;
 	public var beat:Float = 0.0;
 	public var quantization:Bool = false;
+	public var missed:Bool = false;
 
 	@:isVar public var type(get, set):String;
 	function get_type():String return behavior.type;
