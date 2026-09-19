@@ -40,6 +40,7 @@ class Note extends BaseNote {
 		this._data = data;
 
 		sustain = null;
+		passedStrumline = false;
 
 		multAlpha = 1;
 		behavior.reset(this);

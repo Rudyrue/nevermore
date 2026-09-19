@@ -15,6 +15,8 @@ class BaseNote extends FlxSprite {
 	public var strumline:Strumline;
 	public var receptor:Receptor;
 
+	public var passedStrumline:Bool;
+
 	public var adjustedTime(get, never):Float;
 	function get_adjustedTime():Float {
 		return time + Nevermore.settings.inputOffset;

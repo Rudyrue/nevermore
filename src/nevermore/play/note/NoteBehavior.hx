@@ -7,6 +7,7 @@ class NoteBehavior {
 	public var hitHealth:Float;
 	public var missHealth:Float;
 	public var judgemental:Bool; // my feelings :(
+	public var punishable:Bool;
 
 	var _parent:BaseNote;
 
@@ -23,6 +24,7 @@ class NoteBehavior {
 		missPadding = 25;
 		hittable = true;
 		ignore = false;
+		punishable = false;
 
 		type = '';
 	}
@@ -32,6 +34,7 @@ class NoteBehavior {
 		switch v {
 			case 'Mine':
 				ignore = true;
+				punishable = true;
 				missHealth = 0;
 				hitHealth = -10;
 

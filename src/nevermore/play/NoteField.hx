@@ -41,6 +41,9 @@ class NoteField extends BaseField {
 		return scrollDirection = v;
 	}
 
+	public var assistTicks:Bool = false;
+	public var tickSound:FlxSound;
+
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
 		sustains = new FlxTypedSpriteGroup<Sustain>();
 		sustains.active = false;
@@ -73,6 +76,7 @@ class NoteField extends BaseField {
 
 			note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
+			if (!note.passedStrumline) checkAssistTick(note);
 
 			// should probably move this to a separate function later
 			if (note.strumline.ai && note.adjustedTime - clock.time <= 0) {
@@ -91,6 +95,8 @@ class NoteField extends BaseField {
 			var sustain:Sustain = sustains.members[i];
 			if (!sustain.exists) continue;
 
+			sustain.update(delta);
+
 			holdInputs(sustain);
 			sustain.move(scrollVelocities ? velocityClock : clock);
 			sustain.calcHeight(sustain.strumline.speed / clock.rate);
@@ -99,6 +105,18 @@ class NoteField extends BaseField {
 				sustain.kill();
 			}
 		}
+	}
+
+	function checkAssistTick(note:Note) {
+		if (note.player != playerID || note.time - clock.time > 0) return;
+
+		note.passedStrumline = true;
+
+		var behavior:NoteBehavior = note.behavior;
+		if (!behavior.hittable || behavior.punishable) return;
+
+		if (tickSound == null || !assistTicks) return;
+		tickSound.play(true);
 	}
 
 	override function getStrumline(id:Int):Strumline {
