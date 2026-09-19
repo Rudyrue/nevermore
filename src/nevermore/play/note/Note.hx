@@ -13,6 +13,8 @@ class Note extends BaseNote {
 		new Vector3()
 	];
 
+	public var sustain:Sustain;
+
 	override function set_type(v:String):String {
 		strumline.skin.applyNote(this);
 
@@ -36,6 +38,8 @@ class Note extends BaseNote {
 	public function setup(strumline:Strumline, data:NoteData):Note {
 		this.strumline = strumline;
 		this._data = data;
+
+		sustain = null;
 
 		multAlpha = 1;
 		behavior.reset(this);

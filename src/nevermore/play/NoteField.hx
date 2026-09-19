@@ -4,12 +4,18 @@ import flixel.group.FlxSpriteGroup;
 import nevermore.play.note.*;
 
 class NoteField extends BaseField {
+	public var sustains:FlxTypedSpriteGroup<Sustain>;
 	public var strumlines:FlxTypedSpriteGroup<Strumline>;
 	public var notes:FlxTypedSpriteGroup<Note>;
 
 	override function set_scrollSpeed(v:Float):Float {
 		for (line in strumlines.members) {
 			line.speed = v;
+		}
+
+		for (sustain in sustains.members) {
+			sustain.forceHeightRecalc = true;
+			sustain.calcHeight(v / clock.rate);
 		}
 
 		return scrollSpeed = v;
@@ -24,8 +30,13 @@ class NoteField extends BaseField {
 	}
 
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
+		sustains = new FlxTypedSpriteGroup<Sustain>();
+		sustains.active = false;
+
 		strumlines = new FlxTypedSpriteGroup<Strumline>();
+
 		notes = new FlxTypedSpriteGroup<Note>();
+		notes.active = false;
 
 		for (line in lines ?? []) {
 			strumlines.add(line);
@@ -35,9 +46,9 @@ class NoteField extends BaseField {
 
 		this.playerID = playerID;
 
+		add(sustains);
 		add(strumlines);
 		add(notes);
-		notes.active = false;
 	}
 
 	var killDelay:Float = 300;
@@ -53,6 +64,19 @@ class NoteField extends BaseField {
 
 			if (note.adjustedTime < clock.time - killDelay) {
 				note.kill();
+			}
+		}
+
+		for (i in 0...sustains.length) {
+			var sustain:Sustain = sustains.members[i];
+			if (!sustain.exists) continue;
+
+			holdInputs(sustain);
+			sustain.move(scrollVelocities ? velocityClock : clock);
+			sustain.calcHeight(sustain.strumline.speed / clock.rate);
+
+			if (sustain.adjustedTime + sustain.length < clock.time - killDelay) {
+				sustain.kill();
 			}
 		}
 	}
@@ -76,18 +100,26 @@ class NoteField extends BaseField {
 		if (data.player >= strumlines.length) return;
 
 		var note = addNote(data, notes, Note);
-/*		if (data.length > 0) {
+		if (data.length > 0) {
 			var sustain = addNote(data, sustains, Sustain);
 			sustain.calcHeight(sustain.strumline.speed / clock.rate);
 
 			note.sustain = sustain;
-		}*/
+		}
 	}
 
+	var held:Array<Bool> = [for (i in 0...Nevermore.keyCount) false];
 	override function pressed(direction:Int) {
 		if (Nevermore.paused) return;
 
+		if (held[direction]) return;
+		held[direction] = true;
+
 		tapInputs(direction, playerID);
+	}
+
+	override function released(direction:Int) {
+		held[direction] = false;
 	}
 
 	// you don't have to do inputs like this
@@ -130,11 +162,79 @@ class NoteField extends BaseField {
 			//receptor.glow(null, noteToHit);
 
 			noteToHit.kill();
+			if (noteToHit.sustain != null) {
+				noteToHit.sustain.wasHit = true;
+			}
 		} else {
 			receptor.isHolding = true;
 			//receptor.glow('pressed');
 		}
 
 		return noteToHit;
+	}
+
+	var sustainInterval:Float = 0.12;
+	function holdInputs(sustain:Sustain) {
+		if (!sustain.wasHit) return;
+
+		var strumline:Strumline = sustain.strumline;
+		var receptor:Receptor = sustain.receptor;
+
+		var held:Bool = held[sustain.lane];
+		var playerHeld:Bool = (held || sustain.regrabTimer > 0);
+		var heldKey:Bool = (!strumline.ai && playerHeld) || (strumline.ai && sustain.adjustedTime <= clock.time);
+
+		final regrabLimit = Judgement.max.window / 1000;
+		if (sustain.regrabTimer < regrabLimit && held) {
+			//receptor.glow('standard');
+		}
+
+		sustain.regrabTimer = held ? regrabLimit : sustain.regrabTimer - FlxG.elapsed;
+		sustain.regrabAlpha = strumline.ai ? 1 : 0.6 + 0.4 * (sustain.regrabTimer / regrabLimit);
+
+		final curHolds = strumline.curHolds;
+		if (!heldKey) {
+			if (!strumline.ai) {
+				curHolds.remove(sustain);
+				sustain.regrabAlpha = 0.2;
+				sustain.wasHit = false;
+				//noteMissed(sustain.strumline, sustain);
+			}
+
+			return;
+		}
+
+		// only clip if it's past the sustain
+		if (!scrollVelocities)
+			sustain.timeOffset = -Math.min(sustain.adjustedTime - clock.time, 0);
+		else if (clock.time >= sustain.adjustedTime)
+			sustain.timeOffset = velocityClock.time - sustain.visualTime;
+		
+		sustain.forceHeightRecalc = true;
+		receptor.isHolding = true;
+
+		if (!curHolds.contains(sustain)) {
+			// we want the most recent, but we also dont wanna prioritize super short sustains
+			final idx = sustain.length >= 250 ? curHolds.length : 0;
+			curHolds.insert(idx, sustain);
+		} else if (sustain.adjustedTime + sustain.length <= clock.time) {
+			curHolds.remove(sustain);
+			sustain.kill();
+			receptor.isHolding = held;
+			if (strumline.ai) {
+				//receptor.glow('standard');
+				receptor.isHolding = false;
+			}
+			sustain.untilTick = 0; // Hit it one last time, to make sure
+		}
+
+		sustain.untilTick -= FlxG.elapsed;
+		if (sustain.untilTick > 0) return;
+
+		sustain.untilTick = sustainInterval;
+/*		if (strumline.ai || held)
+			receptor.glow(null, sustain);*/
+
+		//sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
 	}
 }

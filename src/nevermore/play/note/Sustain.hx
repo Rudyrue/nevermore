@@ -29,6 +29,11 @@ class Sustain extends Note {
 		}
 	}
 
+	override function set_type(v:String):String {
+		strumline.skin.applySustain(this);
+		return type = behavior.type = v;
+	}
+
 	public var quants:Bool = false;
 
 	public var wasHit:Bool;
