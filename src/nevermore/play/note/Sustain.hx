@@ -34,8 +34,6 @@ class Sustain extends Note {
 		return type = behavior.type = v;
 	}
 
-	public var quants:Bool = false;
-
 	public var wasHit:Bool;
 	public var regrabTimer:Float;
 	public var regrabAlpha:Float;
@@ -151,7 +149,7 @@ class Sustain extends Note {
 	// meaning drawing the flxframe this way will draw it as it is shown in the sheet
 	//
 	// tldr if your sustain frames are rotated you're fucked
-	override public function drawComplex(camera:FlxCamera) {
+	override function drawComplex(camera:FlxCamera) {
 		final camX = camera.scroll.x * scrollFactor.x;
 
 		final yFlip:Bool = flipY;
@@ -180,8 +178,10 @@ class Sustain extends Note {
 			vertices[5] = vertices[7] = y + curY;
 
 			// only renders the piece if the piece is within the viewport
-			if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop)
-				camera.drawNoteVertices(holdFrame, vertices, colorTransform, blend, antialiasing, quants, 0, colorTransform.alphaMultiplier * regrabAlpha);
+			if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && 
+				Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop) {
+				camera.drawNoteVertices(holdFrame, vertices, colorTransform, blend, antialiasing, quantization, 0, colorTransform.alphaMultiplier * regrabAlpha);
+			}
 		}
 
 		holdFrame.frame.y = backupHoldY;
@@ -197,16 +197,23 @@ class Sustain extends Note {
 		vertices[5] = vertices[7] = y + curY + (tailFrame.frame.height * scale.y * yMult);
 
 		// only renders the tail if the piece is within the viewport
-		if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop)
-			camera.drawNoteVertices(tailFrame, vertices, colorTransform, blend, antialiasing, quants, 0, colorTransform.alphaMultiplier * regrabAlpha);
+		if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && 
+			Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop) {
+			camera.drawNoteVertices(tailFrame, vertices, colorTransform, blend, antialiasing, quantization, 0, colorTransform.alphaMultiplier * regrabAlpha);
+		}
 
 		tailFrame.frame.y = backupTailY;
 		tailFrame.frame.height = backupTailHeight;
 	}
 
 	function updateFrames(time:Float) {
-		holdFrame = frames.frames[holdAnim.frames[Math.floor(Math.abs(time * 0.001 * holdAnim.frameRate) % holdAnim.frames.length)]];
-		tailFrame = frames.frames[tailAnim.frames[Math.floor(Math.abs(time * 0.001 * tailAnim.frameRate) % tailAnim.frames.length)]];
+		function getSustainFrame(anim:FlxAnimation):Int {
+			var frameIndex:Float = Math.abs(time / 1000 * anim.frameRate) % anim.frames.length;
+			return anim.frames[Math.floor(frameIndex)];
+		}
+
+		holdFrame = frames.frames[getSustainFrame(holdAnim)];
+		tailFrame = frames.frames[getSustainFrame(tailAnim)];
 	}
 
 	#if !NEVERMORE_NO_MODCHARTS
@@ -352,7 +359,7 @@ class Sustain extends Note {
 			Note.modchartVertices[3].project();
 
 			modchart.stealthColor.copyFrom(curStealthColor);
-			modchart.pushDraw(player, field, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quants, stealth, layer);
+			modchart.pushDraw(player, field, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
 			modchart.stealthColor.copyFrom(nextStealthColor);
 
 			Note.modchartVertices[0].copyFrom(Note.modchartVertices[2]);
@@ -387,7 +394,7 @@ class Sustain extends Note {
 		modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, field, SUSTAIN);
 		Note.modchartVertices[3].project();
 
-		modchart.pushDraw(player, field, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quants, stealth, layer);
+		modchart.pushDraw(player, field, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
 
 		tailFrame.frame.y = backupTailY;
 		tailFrame.frame.height = backupTailHeight;

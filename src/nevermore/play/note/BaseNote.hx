@@ -1,6 +1,8 @@
 package nevermore.play.note;
 
 import nevermore.core.timing.BaseClock;
+import nevermore.modchart.ModchartManager;
+import flixel.graphics.frames.FlxFrame;
 import lime.system.System;
 
 // a data-driven note class that you can build off of 
@@ -24,6 +26,7 @@ class BaseNote extends FlxSprite {
 	public var player:Int = 0;
 	public var length:Float = 0.0;
 	public var beat:Float = 0.0;
+	public var quantization:Bool = false;
 
 	@:isVar public var type(get, set):String;
 	function get_type():String return behavior.type;
@@ -68,5 +71,38 @@ class BaseNote extends FlxSprite {
 		
 		_data = {};
 		behavior = new NoteBehavior(this);
+	}
+
+	function prepareMatrix() {
+		_matrix.translate(-origin.x, -origin.y);
+		_matrix.scale(scale.x, scale.y);
+
+		if (bakedRotationAngle <= 0)
+		{
+			updateTrig();
+
+			if (angle != 0)
+				_matrix.rotateWithTrig(_cosAngle, _sinAngle);
+		}
+
+		getScreenPosition(_point, camera).subtractPoint(offset);
+		_point.add(origin.x, origin.y);
+		_matrix.translate(_point.x, _point.y);
+
+		if (isPixelPerfectRender(camera))
+		{
+			_matrix.tx = Math.floor(_matrix.tx);
+			_matrix.ty = Math.floor(_matrix.ty);
+		}
+	}
+
+	override function drawComplex(camera:flixel.FlxCamera) {
+		_frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
+		prepareMatrix();
+		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quantization);
+	}
+
+	public function drawCrazy(modchart:ModchartManager, direction:ScrollDirection, strumline:Strumline) {
+
 	}
 }

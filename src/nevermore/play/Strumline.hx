@@ -54,6 +54,8 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		return (FlxG.height / 160) / 10;
 	}
 
+	public var quantization:Bool = false;
+
 	public var direction:ScrollDirection;
 	public var speed:Float;
 	public var ai:Bool;

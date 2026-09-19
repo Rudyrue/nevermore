@@ -52,6 +52,10 @@ class Note extends BaseNote {
 		length = data.length;
 		
 		this.receptor = strumline.members[lane];
+		if (!strumline.quantization) quantization = false;
+		else quantization = Nevermore.settings.quantization;
+
+		color = quantization ? Quantization.current[data.quant] : FlxColor.WHITE;
 
 		type = data.type;
 

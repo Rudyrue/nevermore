@@ -93,6 +93,7 @@ class BaseField extends FlxSpriteGroup {
 		} else velocityClock.map.reset(chart.scrollVelocities);
 
 		var map:TimingMap = clock.timingMap;
+		clock.reset(chart.timingPoints);
 		clock.offset = chart.offset;
 
 		applyModifiers(chart, modifiers);
