@@ -98,6 +98,8 @@ class NoteField extends BaseField {
 					if (note.sustain != null) {
 						note.sustain.wasHit = true;
 					}
+
+					noteHit(note.strumline, note);
 				}
 			} else if (!note.missed && !note.ignore && note.late) {
 				note.missed = true;
@@ -142,13 +144,11 @@ class NoteField extends BaseField {
 	}
 
 	function addNote<T:Note>(data:NoteData, group:FlxTypedSpriteGroup<T>, cls:Class<T>):T {
-		var strumline:Strumline = getStrumline(data.player);
+		var obj:T = group.recycle(cls);
+		group.remove(obj, true); // keep ordering
+		group.add(cast obj.setup(getStrumline(data.player), data));
 
-		var note:T = group.recycle(cls);
-		group.remove(note, true); // keep ordering
-		group.add(cast note.setup(strumline, data));
-
-		return note;
+		return obj;
 	}
 
 	override function noteSpawned(data:NoteData) {
@@ -225,7 +225,6 @@ class NoteField extends BaseField {
 		}
 
 		if (noteToHit != null) {
-			//noteHit(strumline, noteToHit);
 			//receptor.glow(null, noteToHit);
 
 			noteToHit.kill();
@@ -265,7 +264,7 @@ class NoteField extends BaseField {
 				curHolds.remove(sustain);
 				sustain.regrabAlpha = 0.2;
 				sustain.wasHit = false;
-				//noteMissed(sustain.strumline, sustain);
+				sustainDropped(sustain.strumline, sustain);
 			}
 
 			return;
@@ -302,7 +301,7 @@ class NoteField extends BaseField {
 /*		if (strumline.ai || held)
 			receptor.glow(null, sustain);*/
 
-		//sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
+		sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
 	}
 
 	override function draw():Void {

@@ -11,9 +11,6 @@ enum ListenerType {
 	RELEASED;
 }
 
-// TODO:
-// figure out how to customize keybinds at runtime
-// unless this way just works somehow and i don't realize it
 class Controls {
 	public static var initialized:Bool = false;
 
@@ -30,50 +27,6 @@ class Controls {
 		2 => [GamepadButton.Y, GamepadButton.DPAD_UP],
 		3 => [GamepadButton.B, GamepadButton.DPAD_RIGHT]
 	]);
-
-	public static function addKeyboardListener(type:ListenerType, callback:KeyCode->KeyModifier -> Void) {
-		switch type {
-			case PRESSED:
-				Application.current.window.onKeyDown.add(callback);
-
-			case RELEASED:
-				Application.current.window.onKeyUp.add(callback);
-		}
-	}
-
-	public static function removeKeyboardListener(type:ListenerType, callback:KeyCode->KeyModifier -> Void) {
-		switch type {
-			case PRESSED:
-				Application.current.window.onKeyDown.remove(callback);
-
-			case RELEASED:
-				Application.current.window.onKeyUp.remove(callback);
-		}
-	}
-
-	public static function addGamepadListener(type:ListenerType, callback:GamepadButton -> Void) {
-		var current:Gamepad = Gamepad.devices[0];
-
-		switch type {
-			case PRESSED:
-				current.onButtonDown.add(callback);
-
-			case RELEASED:
-				current.onButtonUp.add(callback);
-		}
-	}
-
-	public static function removeGamepadListener(type:ListenerType, callback:GamepadButton -> Void) {
-		var current:Gamepad = Gamepad.devices[0];
-
-		switch type {
-			case PRESSED:
-				current.onButtonDown.remove(callback);
-
-			case RELEASED:
-				current.onButtonUp.remove(callback);
-		}
-	}
 
 	public static function init() {
 		if (initialized) return;

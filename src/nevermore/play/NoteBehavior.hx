@@ -1,4 +1,6 @@
-package nevermore.play.note;
+package nevermore.play;
+
+import nevermore.play.note.BaseNote;
 
 class NoteBehavior {
 	static var _list:Map<String, NoteBehavior> = [];
@@ -25,7 +27,7 @@ class NoteBehavior {
 		note.missPadding = 25;
 		note.hitHealth = 1;
 		note.missHealth = -1;
-		note.judgemental = true; // my feelings :(
+		note.judgemental = true;
 		note.punishable = false;
 	}
 
