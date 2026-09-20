@@ -21,6 +21,9 @@ class BaseNote extends FlxSprite {
 	function get_adjustedTime():Float {
 		return time + Nevermore.settings.inputOffset;
 	}
+
+	public var multAlpha:Float = 1;
+	public var distance:Float = 0.0;
 	
 	public var visualTime:Float = 0.0;
 	public var time:Float = 0.0;
@@ -31,10 +34,9 @@ class BaseNote extends FlxSprite {
 	public var quantization:Bool = false;
 	public var missed:Bool = false;
 
-	@:isVar public var type(get, set):String;
-	function get_type():String return behavior.type;
+	public var type(default, set):String;
 	function set_type(v:String):String {
-		return behavior.type = v;
+		return type = v;
 	}
 
 	// kind of unintentional but also could be
@@ -71,9 +73,25 @@ class BaseNote extends FlxSprite {
 
 	public function new() {
 		super();
-		
 		_data = {};
-		behavior = new NoteBehavior(this);
+	}
+
+	public var ignore:Bool = false;
+	public var hittable:Bool = true;
+	public var missPadding:Float = 25;
+	public var hitHealth:Float = 1;
+	public var missHealth:Float = -1;
+	public var judgemental:Bool = true; // my feelings :(
+	public var punishable:Bool = false;
+
+	public var inRange(get, never):Bool;
+	function get_inRange():Bool {
+		return behavior.inRange(this);
+	}
+
+	public var late(get, never):Bool;
+	function get_late():Bool {
+		return behavior.isLate(this);
 	}
 
 	function prepareMatrix() {

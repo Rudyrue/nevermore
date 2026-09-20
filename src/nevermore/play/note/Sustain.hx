@@ -30,8 +30,9 @@ class Sustain extends Note {
 	}
 
 	override function set_type(v:String):String {
+		type = v;
 		strumline.skin.applySustain(this);
-		return type = behavior.type = v;
+		return v;
 	}
 
 	public var wasHit:Bool;
@@ -40,12 +41,12 @@ class Sustain extends Note {
 	public var untilTick:Float;
 	public var visualEnd:Float;
 	override function setup(strumline:Strumline, data:NoteData):Note {
-		super.setup(strumline, data);
-
 		wasHit = false;
 		regrabTimer = Judgement.max.window / 1000;
 		regrabAlpha = 0.7;
 		untilTick = 0;
+
+		super.setup(strumline, data);
 
 		lastScaleY = -1;
 		lastSustainScale = -1;

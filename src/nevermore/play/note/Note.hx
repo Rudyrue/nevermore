@@ -17,24 +17,10 @@ class Note extends BaseNote {
 	public var sustain:Sustain;
 
 	override function set_type(v:String):String {
+		type = v;
 		strumline.skin.applyNote(this);
-
-		switch v {
-			// TODO:
-			// find some way to make this a texture ??
-			// nevermore doesn't have textures built-in
-			case 'Mine':
-				multAlpha = 0;
-
-			case 'Fake':
-				multAlpha = 0.4;
-		}
-
-		return super.set_type(v);
+		return v;
 	}
-
-	public var multAlpha:Float;
-	public var distance:Float;
 
 	public function setup(strumline:Strumline, data:NoteData):Note {
 		this.strumline = strumline;
@@ -42,9 +28,6 @@ class Note extends BaseNote {
 
 		sustain = null;
 		passedStrumline = false;
-
-		multAlpha = 1;
-		behavior.reset(this);
 		
 		visualTime = data.visualTime;
 		time = data.time;
@@ -60,6 +43,8 @@ class Note extends BaseNote {
 		color = quantization ? Quantization.current[data.quant] : FlxColor.WHITE;
 
 		type = data.type;
+		behavior = NoteBehavior.get(type);
+		behavior.setup(this, _data);
 
 		return this;
 	}

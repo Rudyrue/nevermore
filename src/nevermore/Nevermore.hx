@@ -5,6 +5,8 @@ import nevermore.modchart.ModchartManager;
 #end
 import nevermore.backend.Git.Commit;
 
+import nevermore.play.note.*;
+
 enum abstract ScrollDirection(String) from String to String {
 	var UP = 'Up';
 	var DOWN = 'Down';
@@ -92,6 +94,9 @@ class Nevermore {
 		FlxG.plugins.add(new Conductor());
 		Controls.init();
 		Judgement.reset();
+
+		NoteBehavior.register('Fake', FakeBehavior);
+		NoteBehavior.register('Mine', MineBehavior);
 
 		#if !NEVERMORE_NO_QUANTIZATION 
 		Quantization.reset(); 

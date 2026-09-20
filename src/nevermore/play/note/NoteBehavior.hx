@@ -1,61 +1,42 @@
 package nevermore.play.note;
 
 class NoteBehavior {
-	public var ignore:Bool;
-	public var hittable:Bool;
-	public var missPadding:Float;
-	public var hitHealth:Float;
-	public var missHealth:Float;
-	public var judgemental:Bool; // my feelings :(
-	public var punishable:Bool;
+	static var _list:Map<String, NoteBehavior> = [];
+	
+	// because map access on EVERY note instead of unique ones
+	// sounds like an extremely bad idea
+	static var base:NoteBehavior = new NoteBehavior();
 
-	var _parent:BaseNote;
-
-	public function new(parent:BaseNote) {
-		reset(parent);
+	public static function register(name:String, cls:Class<NoteBehavior>) {
+		_list.set(name, Type.createInstance(cls, []));
 	}
 
-	public function reset(parent:BaseNote) {
-		_parent = parent;
-
-		judgemental = true;
-		missHealth = -1;
-		hitHealth = 1;
-		missPadding = 25;
-		hittable = true;
-		ignore = false;
-		punishable = false;
-
-		type = '';
+	public static function get(name:String):NoteBehavior {
+		if (!_list.exists(name)) return base;
+		return _list[name];
 	}
 
-	public var type(default, set):String = '';
-	public function set_type(v:String):String {
-		switch v {
-			case 'Mine':
-				ignore = true;
-				punishable = true;
-				missHealth = 0;
-				hitHealth = -10;
-
-			case 'Fake':
-				ignore = true;
-				hittable = false;
-		}
-
-		return type = v;
+	public function new() {}
+	public function setup(note:BaseNote, data:NoteData) {
+		note.multAlpha = 1;
+		
+		note.ignore = false;
+		note.hittable = true;
+		note.missPadding = 25;
+		note.hitHealth = 1;
+		note.missHealth = -1;
+		note.judgemental = true; // my feelings :(
+		note.punishable = false;
 	}
 
-	public var inRange(get, never):Bool;
-	function get_inRange():Bool {
-		var early:Bool = _parent.adjustedTime < _parent.clock.time + Judgement.max.window;
-		var late:Bool = _parent.adjustedTime > _parent.clock.time - Judgement.max.window;
+	public function inRange(note:BaseNote):Bool {
+		var early:Bool = note.adjustedTime < note.clock.time + Judgement.max.window;
+		var late:Bool = note.adjustedTime > note.clock.time - Judgement.max.window;
 		return early && late;
 	}
 
-	public var late(get, never):Bool;
-	function get_late():Bool {
-		var deviation:Float = _parent.adjustedTime - _parent.clock.time;
-		return deviation < -(Judgement.max.window + missPadding);
+	public function isLate(note:BaseNote):Bool {
+		var deviation:Float = note.adjustedTime - note.clock.time;
+		return deviation < -(Judgement.max.window + note.missPadding);
 	}
 }
