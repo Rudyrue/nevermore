@@ -1,4 +1,4 @@
-package nevermore.core.chart;
+package nevermore.core;
 
 // TODO:
 // maybe make a small fnf parser just so people don't 

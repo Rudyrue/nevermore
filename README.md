@@ -5,17 +5,20 @@ until i can figure out a good way to separate it it's gonna be a little messy
 
 # <div align="center">Nevermore</div>
 <div align="center">
+Nevermore is a rhythm game engine made in HaxeFlixel.  
 
-A rhythm game engine/framework written in HaxeFlixel, designed for scalability and performance.
+It's designed primarily for 4 key vertical-scrolling gameplay (like StepMania, Etterna, NotITG, etc).
 
-This was written with Never2x (a Friday Night Funkin' fork/rewrite) in mind, but this can be used  
-outside of Friday Night Funkin' as well.
+The project stemmed from a Friday Night Funkin' fork/rewrite, Never2x, which was also made for the FNF mod Vs. Camellia, with a similar premise.
 
-</div>
+It's designed for performance, as well as scalability and gameplay accuracy.
 
-# <div align="center"> Features</div>
-## Gameplay, out of the box
-The project offers a simple way to set up gameplay without being too overbearing.
+</div/>
+
+# Features
+
+## Easy to set up gameplay
+Setting up gameplay is very straightforward.
 ```hx
 import nevermore.skins.Noteskin;
 import nevermore.play.*;
@@ -32,13 +35,13 @@ var difficulty:String = 'Hard';
 var strumline = new Strumline(0, 50, skin);
 strumline.screenCenter(X);
 
-// make a playfield
-var playfield = new PlayField([strumline], 0);
-add(playfield);
+// make a notefield
+var notefield = new NoteField([strumline], 0);
+add(notefield);
 
 // load the audio and chart
 Conductor.inst = FlxG.sound.load(Assets.audio('$songID/Inst'));
-playfield.load(Song.load(songID, difficulty), {
+notefield.load(Song.load(songID, difficulty), {
 	randomizedNotes: true,
 	sustains: false
 });
@@ -48,55 +51,66 @@ Conductor.play();
 ```
 
 ## Modcharting
-The project supports modcharting, the likes of something you'd see on NotITG.  
+Nevermore supports modcharting, the likes of something you'd see on NotITG.  
 Albeit, it might be a little lackluster in terms of how much it's capable of.
 
-(see ModchartManager.hx for more)
+(see [ModchartManager.hx](src/nevermore/modchart/ModchartManager.hx) for more)
 ```hx
 import nevermore.modchart.ModchartManager;
 
-var playfield = new PlayField([], 0);
-add(playfield);
+var notefield = new NoteField();
+add(notefield);
 
 var modchart = new ModchartManager();
 modchart.setAt(2, 'drunk', 0.75);
 modchart.setAt(3, 'tipsy', 2);
 // also supports ProxyFields if that's your kinda thing
 
-playfield.modchart = modchart;
+notefield.modchart = modchart;
 ```
 
-# Get Started
-To start using this project, simply `haxelib git nevermore <this repo link>` and add it to your Project.xml.
+## Scroll Velocities
+Nevermore supports scroll velocities as well, referenced and tested with Quaver maps/charts.  
+All you have to do is give your chart a list of scroll velocities to use via `nevermore.core.Chart.scrollVelocities`.  
+(see [ScrollVelocity.hx](./src/nevermore/core/timing/ScrollVelocity.hx) for more)
 
-If you want, you can also use it as a submodule via a `.haxelib` folder in your project's root folder.
+## Quantization
+Nevermore supports note quantization, which is the colour of notes depending on the snap they're at between 2 beats.  
+It can be turned on with `Nevermore.settings.quantization`.  
+(see [Quantization.hx](./src/nevermore/core/Quantization.hx) for more)
 
-Then, simply call `Nevermore.init();` any time after making a FlxGame instance.
+# FAQ
+## "Why was this made, and not built directly into Never2x?"
+A couple of reasons.
+* Parity (Camellia -> Never2x, Never2x -> Camellia)
+	- Writing code for Camellia at the same time of developing Never2x got EXTREMELY annoying.   
+	Camellia would have a bug with gameplay that got fixed, and then you would have to  
+	copy paste that SAME FIX over to the Never2x repo, since both repos are basically the fork/"engine"  
+	copy pasted twice.  
+	Not only that, there'd be a chance the fix wouldn't work, because of project specific changes,  
+	so you would have to recreate the fix AGAIN.
+	
+* I've always wanted to do a thing like this
+	- I've always wanted to make some sort of rhythm game library that people can learn from, so having  
+	a chance to do this was, kinda perfect.
 
-```hx
-import nevermore.Nevermore;
+* The codebase was getting VERY messy
+	- There were alot of things with the codebase I wasn't really a fan of. Whether it was the code itself,  
+	the architecture/API, or just how things were organized.
 
-class Main extends openfl.display.Sprite {
-	public function new() {
-		super();
+## "What is Never2x, exactly?"
+A fork of Friday Night Funkin' that is primarily aimed towards gameplay.                              
+When we were still developing Camellia 2.75, alot of the engines (Psych, Codename, Base Game)  
+didn't run very well, or were either too shit to work with, and required too much modification to work well enough.  
+So, we decided "fuck it", and made our own instead.  
 
-		addChild(new flixel.FlxGame(0, 0, InitState));
-		Nevermore.init();
-	}
-}
-
-// calling it here works as well
-class InitState extends flixel.FlxState {
-	override function create():Void {
-		Nevermore.init();
-	}
-}
-```
+The name is still a secret, and does in fact mean something.  
+All in due time.
 
 # Credits
-* RapperGF - Architecture and API suggestions
+* RapperGF - Assisting in developing architecture and API
 * Marsh - Bugfixes and scroll velocity support
 * SrtPro278 - Modchart, sustain, and quantization functionality/rendering
-* Vs. Camellia - Never2x
+* Vs. Camellia - Allowing me to make Never2x
 
-# <div align="center">Artificial Intelligence (such as ChatGPT, Gemini, Github Copilot, DeepSeek) has not been used and/or assisted in the making of this project.</div>
+# <div align="center">Artificial Intelligence (such as ChatGPT, Claude, Gemini, Github Copilot, DeepSeek) has not been used and/or assisted in the making of this project.</div>

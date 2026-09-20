@@ -1,4 +1,4 @@
-package nevermore.core.chart;
+package nevermore.core;
 
 import nevermore.core.timing.ScrollVelocity;
 import nevermore.core.timing.TimingPoint;
