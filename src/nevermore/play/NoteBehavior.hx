@@ -18,24 +18,16 @@ class NoteBehavior {
 		return _list[name];
 	}
 
-	public var ignore:Bool;
-	public var hittable:Bool;
-	public var missPadding:Float;
-	public var hitHealth:Float;
-	public var missHealth:Float;
-	public var judgemental:Bool; // my feelings :(
-	public var punishable:Bool;
+	public var ignore:Bool = true;
+	public var hittable:Bool = true;
+	public var missPadding:Float = 25;
+	public var hitHealth:Float = 1;
+	public var missHealth:Float = -1;
+	public var judgemental:Bool = true; // my feelings :(
+	public var punishable:Bool = false;
 
 	public function new() {}
-	public function setup(note:BaseNote, data:NoteData) {
-		ignore = false;
-		hittable = true;
-		missPadding = 25;
-		hitHealth = 1;
-		missHealth = -1;
-		judgemental = true;
-		punishable = false;
-	}
+	public function setup(note:BaseNote, data:NoteData) {}
 
 	public function inRange(note:BaseNote):Bool {
 		var early:Bool = note.adjustedTime < note.clock.time + Judgement.max.window;

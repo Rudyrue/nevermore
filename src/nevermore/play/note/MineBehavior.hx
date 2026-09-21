@@ -1,13 +1,16 @@
 package nevermore.play.note;
 
 class MineBehavior extends NoteBehavior {
-	override function setup(note:BaseNote, data:NoteData) {
-		super.setup(note, data);
+	public function new() {
+		super();
 
-		note.multAlpha = 0;
-		note.length = data.length = 0;
 		ignore = true;
 		punishable = true;
 		missHealth = -10;
+	}
+
+	override function setup(note:BaseNote, data:NoteData) {
+		note.multAlpha = 0;
+		note.length = data.length = 0;
 	}
 }
