@@ -7,17 +7,17 @@ import nevermore.core.NoteData;
 @:structInit
 @:publicFields
 class Chart {
-	var title:String;
+	var title:String = 'Unknown';
 	var timingPoints:Array<TimingPoint>;
-	var scrollVelocities:Array<ScrollVelocity>;
-	var notes:Array<NoteData>;
-	var speed:Float;
-	var offset:Float;
+	var scrollVelocities:Array<ScrollVelocity> = [];
+	var notes:Array<NoteData> = [];
+	var speed:Float = 1;
+	var offset:Float = 0;
 
 	/*
 		some formats (like quaver) reset quant
 		on a new bpm change
 		so we use this.
 	*/
-	var quantsRelativeToChanges:Bool;
+	var quantsRelativeToChanges:Bool = true;
 }

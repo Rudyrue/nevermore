@@ -66,7 +66,17 @@ class BaseField extends FlxSpriteGroup {
 	}
 
 	override function update(delta:Float) {
-		super.update(delta);
+		// inline super.update()
+		// because calling super is costly
+		var i:Int = 0;
+		var obj:flixel.FlxBasic = null;
+
+		while (i < length) {
+			obj = members[i++];
+			if (obj == null || !obj.exists || !obj.active) continue;
+
+			obj.update(delta);
+		}
 
 		if (scrollVelocities) velocityClock.updateSVs(clock);
 		if (modchart != null) modchart.update();

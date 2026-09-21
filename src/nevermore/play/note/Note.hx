@@ -23,6 +23,8 @@ class Note extends BaseNote {
 	}
 
 	public function setup(strumline:Strumline, data:NoteData):Note {
+		active = false;
+
 		this.strumline = strumline;
 
 		sustain = null;

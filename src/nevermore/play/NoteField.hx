@@ -88,7 +88,7 @@ class NoteField extends BaseField {
 			if (!note.passedStrumline) checkAssistTick(note);
 			if (!note.exists) continue;
 
-			note.update(delta);
+			if (note.active) note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
 
 			// should probably move this to a separate function later
@@ -115,7 +115,7 @@ class NoteField extends BaseField {
 			var sustain:Sustain = sustains.members[i];
 			if (!sustain.exists) continue;
 
-			sustain.update(delta);
+			if (sustain.active) sustain.update(delta);
 
 			holdInputs(sustain);
 			sustain.move(scrollVelocities ? velocityClock : clock);

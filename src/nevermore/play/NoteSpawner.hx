@@ -4,7 +4,7 @@ import nevermore.core.NoteData;
 import nevermore.core.timing.BaseClock;
 
 class NoteSpawner {
-	var count:Int;
+	public var count:Int;
 	public function new(?list:Array<NoteData>) {
 		if (list != null) load(list);
 	}
