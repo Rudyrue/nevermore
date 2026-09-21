@@ -24,10 +24,10 @@ class Note extends BaseNote {
 
 	public function setup(strumline:Strumline, data:NoteData):Note {
 		this.strumline = strumline;
-		this._data = data;
 
 		sustain = null;
 		passedStrumline = false;
+		multAlpha = 1;
 		
 		visualTime = data.visualTime;
 		time = data.time;
@@ -44,7 +44,7 @@ class Note extends BaseNote {
 
 		type = data.type;
 		behavior = NoteBehavior.get(type);
-		behavior.setup(this, _data);
+		behavior.setup(this, data);
 
 		return this;
 	}

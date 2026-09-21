@@ -6,7 +6,7 @@ class FakeBehavior extends NoteBehavior {
 
 		note.multAlpha = 0.4;
 		note.length = data.length = 0;
-		note.ignore = true;
-		note.hittable = false;
+		ignore = true;
+		hittable = false;
 	}
 }

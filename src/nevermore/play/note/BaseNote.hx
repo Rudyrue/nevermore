@@ -9,7 +9,6 @@ import lime.system.System;
 // for making your own note(field) system
 // no rendering/drawing is done
 class BaseNote extends FlxSprite {
-	var _data:NoteData;
 	public var behavior:NoteBehavior;
 
 	public var strumline:Strumline;
@@ -71,18 +70,7 @@ class BaseNote extends FlxSprite {
 
 	public function move(clock:BaseClock):Void {}
 
-	public function new() {
-		super();
-		_data = {};
-	}
-
-	public var ignore:Bool = false;
-	public var hittable:Bool = true;
-	public var missPadding:Float = 25;
-	public var hitHealth:Float = 1;
-	public var missHealth:Float = -1;
-	public var judgemental:Bool = true; // my feelings :(
-	public var punishable:Bool = false;
+	public function new() super();
 
 	public var inRange(get, never):Bool;
 	function get_inRange():Bool {

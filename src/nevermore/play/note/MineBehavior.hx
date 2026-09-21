@@ -6,8 +6,8 @@ class MineBehavior extends NoteBehavior {
 
 		note.multAlpha = 0;
 		note.length = data.length = 0;
-		note.ignore = true;
-		note.punishable = true;
-		note.missHealth = -10;
+		ignore = true;
+		punishable = true;
+		missHealth = -10;
 	}
 }

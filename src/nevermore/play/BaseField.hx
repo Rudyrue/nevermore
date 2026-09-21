@@ -5,7 +5,7 @@ import nevermore.core.timing.BaseClock;
 import nevermore.core.timing.VelocityClock;
 import nevermore.core.timing.TimingMap;
 import nevermore.modchart.ModchartManager;
-import nevermore.core.chart.Chart;
+import nevermore.core.Chart;
 
 // a base class for any fields for you to build off of
 // gives you mostly everything you'd need to make your own notefield

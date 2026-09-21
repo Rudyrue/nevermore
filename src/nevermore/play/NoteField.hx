@@ -101,7 +101,7 @@ class NoteField extends BaseField {
 
 					noteHit(note.strumline, note);
 				}
-			} else if (!note.missed && !note.ignore && note.late) {
+			} else if (!note.missed && !note.behavior.ignore && note.late) {
 				note.missed = true;
 				noteMiss(note.strumline, note);
 			}
@@ -132,7 +132,7 @@ class NoteField extends BaseField {
 		note.passedStrumline = true;
 
 		if (note.player != playerID) return;
-		if (!note.hittable || note.punishable) return;
+		if (!note.behavior.hittable || note.behavior.punishable) return;
 
 		if (tickSound == null || !assistTicks) return;
 		tickSound.play(true);
@@ -211,7 +211,7 @@ class NoteField extends BaseField {
 
 			// is the note hittable in general?
 			// is it within range?
-			if (!note.hittable || !note.inRange) continue;
+			if (!note.behavior.hittable || !note.inRange) continue;
 
 			// checks if the note is the closest to the judgement line
 			// rather than the first available note
