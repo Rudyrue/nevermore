@@ -10,7 +10,7 @@ class NoteField extends BaseField {
 	public var notes:FlxTypedSpriteGroup<Note>;
 
 	public dynamic function noteHit(strumline:Strumline, note:Note):Void {}
-	public dynamic function noteMiss(strumline:Strumline, note:Note):Void {}
+	public dynamic function noteMissed(strumline:Strumline, note:Note):Void {}
 	public dynamic function sustainHit(strumline:Strumline, sustain:Sustain, mostRecent:Bool):Void {}
 	public dynamic function sustainDropped(strumline:Strumline, sustain:Sustain):Void {}
 	public dynamic function ghostTap(strumline:Strumline, dir:Int):Void {}
@@ -103,7 +103,7 @@ class NoteField extends BaseField {
 				}
 			} else if (!note.missed && !note.behavior.ignore && note.late) {
 				note.missed = true;
-				noteMiss(note.strumline, note);
+				noteMissed(note.strumline, note);
 			}
 
 			if (note.adjustedTime < clock.time - killDelay) {
@@ -186,7 +186,6 @@ class NoteField extends BaseField {
 
 	override function released(direction:Int) {
 		if (autoplay) return;
-
 		held[direction] = false;
 	}
 

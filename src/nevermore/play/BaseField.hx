@@ -16,6 +16,11 @@ class BaseField extends FlxSpriteGroup {
 		return clock;
 	}
 
+	// the note count per strumline
+	// noteCount[0] would be the amount of notes on strumline 0
+	// same for 1 and 2 etc
+	public var noteCount:Array<Int> = [];
+
 	public var playerID(default, set):Int = 0;
 	function set_playerID(v:Int):Int {
 		return playerID = v;
@@ -110,7 +115,7 @@ class BaseField extends FlxSpriteGroup {
 
 		var list:Array<NoteData> = [];
 		for (i => note in chart.notes) {
-			//noteCount[note.player]++;
+			
 			note.beat = map.getBeat(note.time);
 			note.quant = Quantization.getID(note.time, map, chart.quantsRelativeToChanges);
 
@@ -119,6 +124,9 @@ class BaseField extends FlxSpriteGroup {
 			}
 
 			list.push(note);
+			if (NoteBehavior.get(note.type).hittable) {
+				noteCount[note.player]++;
+			}
 		}
 		
 		spawner.load(list);

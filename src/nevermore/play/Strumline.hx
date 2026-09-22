@@ -54,7 +54,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		return (FlxG.height / 160) / 10;
 	}
 
-	public var quantization:Bool = false;
+	public var quantization:Bool = Nevermore.settings.quantization;
 
 	public var direction:ScrollDirection;
 	public var speed:Float;
