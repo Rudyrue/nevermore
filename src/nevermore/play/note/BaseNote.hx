@@ -47,7 +47,7 @@ class BaseNote extends FlxSprite {
 	}
 
 	public function getDeviation(?timestamp:Float = 0.0):Float {
-		var result:Float = adjustedTime - clock.time;
+		var result:Float = clock.time - adjustedTime;
 
 		if (timestamp > 0) {
 			// this doesn't seem to do much for lagspikes
@@ -55,17 +55,7 @@ class BaseNote extends FlxSprite {
 			result -= timestamp - System.getTimer();
 		}
 
-		// this is some schizo ass code but
-		// if i don't have this i get like -6 to -8 mean consistently
-		// so whatever
-		//
-		// (why is this required all of a sudden ????????????????)
-		var framerate:Float = 1 / FlxG.elapsed;
-		if (framerate > FlxG.drawFramerate) {
-			result -= (1 / FlxG.drawFramerate) * 1000;
-		}
-
-		return result * -1;
+		return result;
 	}
 
 	public function move(clock:BaseClock):Void {}
