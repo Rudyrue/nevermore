@@ -6,6 +6,8 @@
 	<haxelib name="flixel"/>
 
 	<source path="src"/>
+
+	<assets path="nevermore_assets" rename="nevermore"/>
 	
 	<!-- 
 	since this is called when the lib is defined

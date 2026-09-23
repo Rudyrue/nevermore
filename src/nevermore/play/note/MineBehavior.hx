@@ -11,6 +11,7 @@ class MineBehavior extends NoteBehavior {
 
 	override function setup(note:BaseNote, data:NoteData) {
 		note.multAlpha = 0;
+		//note.frames = Noteskin.get('mine'); AGH
 		note.length = data.length = 0;
 	}
 }

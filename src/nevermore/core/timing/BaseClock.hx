@@ -20,6 +20,9 @@ class BaseClock {
 		stepHit = new FlxTypedSignal<Int -> Void>();
 		beatHit = new FlxTypedSignal<Int -> Void>();
 		measureHit = new FlxTypedSignal<Int -> Void>();
+
+		metronomeSound = new FlxSound();
+		//FlxG.sound.load(Assets.dependency.audio('sfx/metronome')); ??????????????????????????????????????????????????????????????????????????????
 	}
 
 	public function destroy() {
@@ -72,6 +75,9 @@ class BaseClock {
 		updateBeats(songTime);
 	}
 
+	public var metronome:Bool = true;
+	public var metronomeSound:FlxSound;
+
 	public var step:Float;
 	var fStep:Int;
 
@@ -103,6 +109,7 @@ class BaseClock {
 		var nextBeat:Int = Std.int(beat);
 		if (nextBeat != fBeat) {
 			beatHit.dispatch(fBeat = nextBeat);
+			if (metronome) metronomeSound.play(true);
 		}
 
 		var nextMeasure:Int = Std.int(measure);

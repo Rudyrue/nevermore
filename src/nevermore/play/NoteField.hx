@@ -76,6 +76,8 @@ class NoteField extends BaseField {
 		add(sustains);
 		add(strumlines);
 		add(notes);
+
+		tickSound = FlxG.sound.load(Assets.dependency.audio('sfx/hitsound'));
 	}
 
 	var killDelay:Float = 300;

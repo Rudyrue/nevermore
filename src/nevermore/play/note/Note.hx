@@ -25,6 +25,7 @@ class Note extends BaseNote {
 	public function setup(strumline:Strumline, data:NoteData):Note {
 		active = false;
 		moves = false;
+		missed = false;
 
 		this.strumline = strumline;
 

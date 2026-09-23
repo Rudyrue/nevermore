@@ -7,21 +7,17 @@ import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import lime.media.AudioBuffer;
 
-class Assets {
-	public static var imageExt:String = 'png';
-	public static var audioExt:String = 'ogg';
-	public static var rootFolder:String = 'assets';
-
-	public static var cache:AssetCache;
-	public static function init() {
-		cache = new AssetCache();
+class AssetHandler {
+	public var root:String = '';
+	public function new(root:String = '') {
+		this.root = root;
 	}
 
-	public static function image(key:String):FlxGraphic {
-		if (key.lastIndexOf('.') < 0) key += '.$imageExt';
+	public function image(key:String):FlxGraphic {
+		if (key.lastIndexOf('.') < 0) key += '.${Assets.imageExt}';
 		var path = getPath(key);
-		if (cache.exists(path)) {
-			return switch cache.get(path).src {
+		if (Assets.cache.exists(path)) {
+			return switch Assets.cache.get(path).src {
 				case Graphic(graphic): graphic;
 				default: null;
 			}
@@ -32,15 +28,15 @@ class Assets {
 		graphic.persist = true;
 		graphic.destroyOnNoUse = false;
 
-		cache.set(path, {src: Graphic(graphic)});
+		Assets.cache.set(path, {src: Graphic(graphic)});
 		return graphic;
 	}
 
-	public static function audio(key:String):Sound {
-		if (key.lastIndexOf('.') < 0) key += '.$audioExt';
+	public function audio(key:String):Sound {
+		if (key.lastIndexOf('.') < 0) key += '.${Assets.audioExt}';
 		var path = getPath(key);
-		if (cache.exists(path)) {
-			return switch cache.get(path).src {
+		if (Assets.cache.exists(path)) {
+			return switch Assets.cache.get(path).src {
 				case Audio(sound): sound;
 				default: null;
 			}
@@ -50,45 +46,45 @@ class Assets {
 		// but this is function is called audio
 		// and so is the enum
 		var sound:Sound = Sound.fromFile(path);
-		cache.set(path, {src: Audio(sound)});
+		Assets.cache.set(path, {src: Audio(sound)});
 		return sound;
 	}
 
 	// TODO:
 	// only tested on lime develop
 	// somehow figure out how to make it work for pre-8.4.0?
-	public static function streamedAudio(key:String):Sound {
+	public function streamedAudio(key:String):Sound {
 		#if (lime >= version("8.4.0"))
-		if (key.lastIndexOf('.') < 0) key += '.$audioExt';
+		if (key.lastIndexOf('.') < 0) key += '.${Assets.audioExt}';
 		var path = getPath(key);
-		if (cache.exists(path)) {
-			return switch cache.get(path).src {
+		if (Assets.cache.exists(path)) {
+			return switch Assets.cache.get(path).src {
 				case Audio(sound): sound;
 				default: null;
 			}
 		}
 
 		var sound:Sound = Sound.fromAudioBuffer(AudioBuffer.fromFileStream(path));
-		cache.set(path, {src: Audio(sound)});
+		Assets.cache.set(path, {src: Audio(sound)});
 		return sound;
 		#else
 		return audio(key);
 		#end
 	}
 
-	public static function text(key:String):String {
+	public function text(key:String):String {
 		return sys.io.File.getContent(getPath(key));
 	}
 
 	// no need to cache something like this
 	// apparently it's fast enough ????
-	public static function sparrowAtlas(key:String):FlxAtlasFrames {
+	public function sparrowAtlas(key:String):FlxAtlasFrames {
 		var graphic = image(key);
 		var xml = text(key + '.xml');
 		return FlxAtlasFrames.fromSparrow(graphic, xml);
 	}
 
-	public static function multiAtlas(keys:Array<String>):FlxAtlasFrames {
+	public function multiAtlas(keys:Array<String>):FlxAtlasFrames {
 		var parentFrames = sparrowAtlas(keys[0]);
 		if (keys.length == 1) return parentFrames;
 
@@ -103,8 +99,54 @@ class Assets {
 		return parentFrames;
 	}
 
-	public static dynamic function getPath(key:String):String {
-		return '$rootFolder/$key';
+	public dynamic function getPath(key:String):String {
+		return '$root/$key';
+	}
+}
+
+// basically just a wrapper for `main`
+class Assets {
+	public static var imageExt:String = 'png';
+	public static var audioExt:String = 'ogg';
+	public static var rootFolder:String = 'assets';
+
+	public static var main:AssetHandler;
+	public static var dependency:AssetHandler;
+
+	public static var cache:AssetCache;
+	public static function init() {
+		cache = new AssetCache();
+
+		main = new AssetHandler(rootFolder);
+		dependency = new AssetHandler('nevermore');
+	}
+
+	public static function image(key:String):FlxGraphic {
+		return main.image(key);
+	}
+
+	public static function audio(key:String):Sound {
+		return main.audio(key);
+	}
+
+	public static function streamedAudio(key:String):Sound {
+		return main.streamedAudio(key);
+	}
+
+	public static function text(key:String):String {
+		return main.text(key);
+	}
+
+	public static function sparrowAtlas(key:String):FlxAtlasFrames {
+		return main.sparrowAtlas(key);
+	}
+
+	public static function multiAtlas(keys:Array<String>):FlxAtlasFrames {
+		return main.multiAtlas(keys);
+	}
+
+	public static function getPath(key:String):String {
+		return main.getPath(key);
 	}
 }
 

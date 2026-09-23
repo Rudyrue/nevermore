@@ -9,6 +9,12 @@ class Conductor extends flixel.FlxBasic {
 		return Util.crotchet(tempo);
 	}
 
+	@:isVar public static var metronome(get, set):Bool;
+	static function get_metronome():Bool return clock.metronome;
+	static function set_metronome(v:Bool):Bool {
+		return clock.metronome = v;
+	}
+
 	public static var semiquaver(get, never):Float;
 	static function get_semiquaver():Float {
 		return crotchet / 4;
