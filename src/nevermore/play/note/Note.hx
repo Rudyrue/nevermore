@@ -24,6 +24,7 @@ class Note extends BaseNote {
 
 	public function setup(strumline:Strumline, data:NoteData):Note {
 		active = false;
+		moves = false;
 
 		this.strumline = strumline;
 
@@ -53,6 +54,7 @@ class Note extends BaseNote {
 
 	override function move(clock:BaseClock):Void {
 		alpha = receptor.alpha * multAlpha;
+		visible = receptor.visible;
 
 		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 

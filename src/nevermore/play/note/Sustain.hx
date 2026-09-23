@@ -65,6 +65,7 @@ class Sustain extends Note {
 	public var timeOffset:Float;
 	override function move(clock:BaseClock) {
 		alpha = receptor.alpha;
+		visible = receptor.visible;
 
 		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 

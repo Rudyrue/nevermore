@@ -18,7 +18,7 @@ class NoteBehavior {
 		return _list[name];
 	}
 
-	public var ignore:Bool = true;
+	public var ignore:Bool = false;
 	public var hittable:Bool = true;
 	public var missPadding:Float = 25;
 	public var hitHealth:Float = 1;
