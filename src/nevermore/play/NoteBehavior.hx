@@ -30,7 +30,8 @@ class NoteBehavior {
 	public var punishable:Bool = false;
 
 	public function new() {}
-	public function setup(note:BaseNote, data:NoteData) {}
+	public function setupData(data:NoteData) {}
+	public function setup(note:BaseNote) {}
 
 	public function inRange(note:BaseNote):Bool {
 		var early:Bool = note.adjustedTime < note.clock.time + Judgement.max.window;

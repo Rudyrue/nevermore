@@ -48,7 +48,7 @@ class Note extends BaseNote {
 
 		type = data.type;
 		behavior = NoteBehavior.get(type);
-		behavior.setup(this, data);
+		behavior.setup(this);
 
 		return this;
 	}

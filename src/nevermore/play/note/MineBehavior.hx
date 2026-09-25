@@ -9,9 +9,12 @@ class MineBehavior extends NoteBehavior {
 		missHealth = -10;
 	}
 
-	override function setup(note:BaseNote, data:NoteData) {
+	override function setupData(data:NoteData) {
+		data.length = 0;
+	}
+
+	override function setup(note:BaseNote) {
 		note.multAlpha = 0;
 		//note.frames = Noteskin.get('mine'); AGH
-		note.length = data.length = 0;
 	}
 }

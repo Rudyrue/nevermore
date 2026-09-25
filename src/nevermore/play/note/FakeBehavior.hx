@@ -7,8 +7,11 @@ class FakeBehavior extends NoteBehavior {
 		hittable = false;
 	}
 
-	override function setup(note:BaseNote, data:NoteData) {
+	override function setupData(data:NoteData) {
+		data.length = 0;
+	}
+
+	override function setup(note:BaseNote) {
 		note.multAlpha = 0.4;
-		note.length = data.length = 0;
 	}
 }

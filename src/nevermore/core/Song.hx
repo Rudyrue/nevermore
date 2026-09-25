@@ -1,6 +1,7 @@
 package nevermore.core;
 
 import nevermore.core.*;
+import nevermore.play.NoteBehavior;
 
 class Song {
 	public static var parser:BaseParser = new BaseParser();
@@ -41,6 +42,9 @@ class Song {
 			}
 
 			cleanedNotes.push(note);
+			if (note.type.length != 0) {
+				NoteBehavior.get(note.type).setupData(note);
+			}
 		}
 
 		result.notes = cleanedNotes.filter(function(note:NoteData) return note != null);
