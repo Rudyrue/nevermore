@@ -20,4 +20,14 @@ class Chart {
 		so we use this.
 	*/
 	var quantsRelativeToChanges:Bool = true;
+
+	function getNoteCount(?playerID:Int = 0):Int {
+		var count:Int = 0;
+		for (i in 0 ... notes.length) {
+			if (notes[i].player != playerID) continue;
+			count++;
+		}
+
+		return count;
+	}
 }

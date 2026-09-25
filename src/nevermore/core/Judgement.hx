@@ -49,6 +49,11 @@ class Judgement {
 
 	public static function reset() {
 		currentType = STEPMANIA;
+		resetHits();
+	}
+
+	public static function resetHits() {
+		for (judge in current) judge.count = 0;
 	}
 
 	public static function sort() {
@@ -82,7 +87,7 @@ class Judgement {
 	// like score/accuracy
 	public var health:Float = 0;
 	public var score:Int = 0;
-	public var accuracy:Float = 0;
 
-	
+	// how many times this judge has been hit
+	public var count:Int = 0;
 }

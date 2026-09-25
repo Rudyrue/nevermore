@@ -104,8 +104,11 @@ class BaseField extends FlxSpriteGroup {
 	public function load(chart:Chart, ?modifiers:GameplayModifiers) {
 		modifiers ??= {};
 		if (chart.scrollVelocities.length <= 1) {
-			scrollVelocities = false;
-		} else velocityClock.map.reset(chart.scrollVelocities);
+			modifiers.scrollVelocities = false;
+		}
+		
+		scrollVelocities = modifiers.scrollVelocities;
+		if (scrollVelocities) velocityClock.map.reset(chart.scrollVelocities);
 
 		var map:TimingMap = clock.timingMap;
 		clock.reset(chart.timingPoints);
@@ -115,18 +118,9 @@ class BaseField extends FlxSpriteGroup {
 
 		var list:Array<NoteData> = [];
 		for (i => note in chart.notes) {
-			
 			note.beat = map.getBeat(note.time);
 			note.quant = Quantization.getID(note.time, map, chart.quantsRelativeToChanges);
-
-			if (i != 0) {
-				clearStackedNotes(list, note);
-			}
-
 			list.push(note);
-			if (NoteBehavior.get(note.type).hittable) {
-				noteCount[note.player]++;
-			}
 		}
 		
 		spawner.load(list);
@@ -147,19 +141,6 @@ class BaseField extends FlxSpriteGroup {
 				var endTime = note.time + note.length;
 				note.visualEnd = velocityClock.map.getPosition(endTime);
 			}
-		}
-	}
-
-	// TODO:
-	// find a better way to do this ????
-	// this feels clunky/hacky
-	function clearStackedNotes(list:Array<NoteData>, note:NoteData) {
-		for (evilNote in list) {
-			var matches:Bool = note.lane == evilNote.lane && note.player == evilNote.player;
-			if (!matches || Math.abs(note.time - evilNote.time) > 2.0) continue;
-
-			list.remove(evilNote);
-			evilNote.length = 0;
 		}
 	}
 
