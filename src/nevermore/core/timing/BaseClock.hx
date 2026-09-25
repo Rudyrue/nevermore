@@ -2,6 +2,34 @@ package nevermore.core.timing;
 
 import flixel.util.FlxSignal;
 
+// NOTE:
+// this uses SETTING beats, rather than incrementing them
+// the reason why this is so important to mention is because in some circumstances
+// incrementing beats can be more accurate, but it still has its downsides
+// with incrementing, you have the benefit of being more accurate at the cost
+// of being only able to go forwards (you can rewind, but it's a PAIN in the ass)
+// tempo changes are a problem as well, but aren't that bad if you know how to write it
+//
+// setting beats has benefits as well as its downsides
+// setting beats has the benefit of being easier to set up and work with,
+// at the downside of being SLIIIGGGHTLY less accurate
+//
+// this doesn't mean both methods aren't viable, however
+// despite incrementing being the possibly more accurate version, setting beats is more widely used
+// than any other timing method
+// 
+// https://github.com/ppy/osu/blob/master/osu.Game/Graphics/Containers/BeatSyncedContainer.cs#L13
+// https://github.com/stepmania/stepmania/blob/5_1-new/src/TimingData.cpp#L911
+// https://github.com/etternagame/etterna/blob/develop/src/Etterna/Models/Misc/TimingData.cpp#L828
+// https://github.com/quaver/Quaver/blob/master/Quaver.Shared/Screens/Edit/Timing/Metronome.cs#L107
+// https://github.com/uvcat7/ArrowVortex/blob/beta/src/Simfile/TimingData.cpp#L395-409
+//
+// the only game(s) that i know of that increments beats is rhythm doctor/adofai, but that's speculation
+// as both games are closed source
+// and the only information to back it up is a reddit post the developer made on reddit as a rhythm crash course
+//
+// in the end i went with setting beats, as it was easy to set up and the accuracy in my opinion is negligable
+// but it depends on what you're doing and what you need it for, especially what game engine you're using
 class BaseClock {
 	public var audioTime:Float;
 	public var songTime:Float;
