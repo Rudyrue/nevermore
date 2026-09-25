@@ -8,7 +8,7 @@ class NoteData {
 
 	var lane:Int = 0;
 	var player:Int = 0;
-	var quant:Int = -1;
+	var snapID:Int = -1;
 	var beat:Float = 0.0;
 	var type:String = '';
 

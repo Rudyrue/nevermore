@@ -1,7 +1,5 @@
 package nevermore.core;
 
-import nevermore.core.timing.TimingMap;
-
 // these games don't necessarily *have* a set quant list
 // as quants depend on the skin, rather than the game setting them (like in this scenario)
 // the quant list you see here is dependent on the game's default noteskin
@@ -122,21 +120,6 @@ class Quantization {
 		]
 	];
 
-	// `current` should be the same length as this
-	static var _quants:Array<Int> = [
-		4,
-		8,
-		12,
-		16,
-		20,
-		24,
-		32,
-		48,
-		64,
-		96,
-		192
-	];
-
 	public static var currentType(default, set):QuantType;
 	static function set_currentType(v:QuantType):QuantType {
 		currentType = v;
@@ -146,29 +129,6 @@ class Quantization {
 
 	public static function reset() {
 		currentType = STEPMANIA;
-	}
-
-	@:pure public static function getID(timeAt:Float, ?map:TimingMap, ?pointRelative:Bool = true):Int {
-		map ??= Conductor.timingMap;
-
-		var row:Int = 0;
-		if (pointRelative) {
-			row = Math.round(map.getBeat(timeAt) * 48);
-		} else {
-			var point = map.getByTime(timeAt);
-
-			var pos = timeAt - point.time;
-			var crot = Util.crotchet(point.tempo);
-
-			row = Math.round((pos / crot) * 48);
-		}
-
-		for (i in 0..._quants.length) {
-			if (row % (192 / _quants[i]) == 0) // 192 rows per measure (48 * 4)
-				return i;
-		}
-
-		return _quants.length - 1;
 	}
 }
 #else

@@ -119,7 +119,7 @@ class BaseField extends FlxSpriteGroup {
 		var list:Array<NoteData> = [];
 		for (i => note in chart.notes) {
 			note.beat = map.getBeat(note.time);
-			note.quant = Quantization.getID(note.time, map, chart.quantsRelativeToChanges);
+			note.snapID = Util.getSnapID(note.time, map, chart.snapRelativeToChanges);
 			list.push(note);
 		}
 		

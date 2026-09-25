@@ -14,7 +14,10 @@ class NoteBehavior {
 	}
 
 	public static function get(name:String):NoteBehavior {
-		if (!_list.exists(name)) return base;
+		if (name.length == 0 || !_list.exists(name)) {
+			return base;
+		}
+		
 		return _list[name];
 	}
 

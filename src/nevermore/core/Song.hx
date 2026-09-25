@@ -55,7 +55,7 @@ class Song {
 			notes: [],
 			speed: 1,
 			offset: 0,
-			quantsRelativeToChanges: true
+			snapRelativeToChanges: true
 		}
 	}
 }

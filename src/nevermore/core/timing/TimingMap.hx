@@ -60,22 +60,31 @@ class TimingMap {
 		return last;
 	}
 
+	@:pure public function getRow(pos:Float, ?point:TimingPoint):Int {
+		var result:Float = 0.0;
+		if (length <= 1) {
+			result = pos / Util.crotchet(tempo);
+		} else result = getBeat(pos, point ?? getByTime(pos));
+
+		return Math.round(result * Util.rowsPerBeat);
+	}
+
 	// these could be grouped into eachother
 	// but for debugging sake im keeping them separated
 	@:pure public function getBeat(pos:Float, ?point:TimingPoint):Float {
-		if (length <= 1) return pos / (60000 / tempo);
+		if (length <= 1) return pos / Util.crotchet(tempo);
 		point ??= getByTime(pos);
 
-		var crotchet:Float = 60000 / point.tempo;
+		var crotchet:Float = Util.crotchet(point.tempo);
 		var distance:Float = (pos - point.time) / crotchet;
 		return point.beat + distance;
 	}
 
 	@:pure public function getMeasure(pos:Float, ?point:TimingPoint):Float {
-		if (length <= 1) return (pos / (60000 / tempo)) / 4;
+		if (length <= 1) return (pos / Util.crotchet(tempo)) / 4;
 		point ??= getByTime(pos);
 
-		var crotchet:Float = 60000 / point.tempo;
+		var crotchet:Float = Util.crotchet(point.tempo);
 		var distance:Float = (pos - point.time) / crotchet;
 		return point.measure + (distance / point.beatsPerMeasure);
 	}
