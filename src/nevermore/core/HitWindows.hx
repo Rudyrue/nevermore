@@ -51,6 +51,10 @@ class HitWindows {
 		'osu!mania OD9' => [16, 37, 70, 100, 124, 161],
 		'osu!mania OD10' => [16, 33, 66, 97, 121, 158],
 
+		"Friday Night Funkin' (Legacy)" => [33.34, 125, 150, 166.67],
+		"Friday Night Funkin' (Week 7)" => [33.34, 91.69, 133.34, 166.67],
+		"Friday Night Funkin'" => [/* 12.5, */45, 90, 135, 160],
+
 		// these i got from project outfox
 		// as i really don't have a concrete way of getting these (tmk)
 		'DanceDanceRevolution' => [17, 34, 84, 124, 160],
