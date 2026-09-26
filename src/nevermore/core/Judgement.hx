@@ -83,11 +83,6 @@ class Judgement {
 	public var window:Float = 0;
 	public var id:Int = 0;
 
-	// depends on the game but these aren't necessarily used in a couple
-	// like score/accuracy
-	public var health:Float = 0;
-	public var score:Int = 0;
-
 	// how many times this judge has been hit
 	public var count:Int = 0;
 }

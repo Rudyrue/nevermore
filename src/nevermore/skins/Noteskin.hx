@@ -98,8 +98,6 @@ class Noteskin {
 		});
 	}
 
-
-
 	/**
 	 * Used for sharing frame collections across sections.
 	 */

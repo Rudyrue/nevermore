@@ -10,23 +10,6 @@ class Song {
 		
 		var result:Chart = parser.load(path, diff);
 
-/*		for (i => note in result.notes) {
-			if (i == 0) continue; // ignore the first note in the chart
-			var prevNote:NoteData = result.notes[i - 1];
-
-			var matches:Bool = prevNote.player == note.player && prevNote.lane == note.lane;
-			var overlapping:Bool = Math.abs(note.time - prevNote.time) <= 2;
-
-			if (matches) {
-				trace(note.time, prevNote.time);
-				trace(overlapping);
-			}
-
-			if (!matches || !overlapping) continue;
-
-			note = null;
-		}*/
-
 		var cleanedNotes = [];
 		for (i => note in result.notes) {
 			if (i != 0) {

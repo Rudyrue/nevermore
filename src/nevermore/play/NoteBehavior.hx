@@ -41,13 +41,13 @@ class NoteBehavior {
 	public function setup(note:BaseNote) {}
 
 	public function inRange(note:BaseNote):Bool {
-		var early:Bool = note.adjustedTime < note.clock.time + Judgement.max.window;
-		var late:Bool = note.adjustedTime > note.clock.time - Judgement.max.window;
+		var early:Bool = note.adjustedTime < note.clock.time + HitWindows.max;
+		var late:Bool = note.adjustedTime > note.clock.time - HitWindows.max;
 		return early && late;
 	}
 
 	public function isLate(note:BaseNote):Bool {
 		var deviation:Float = note.adjustedTime - note.clock.time;
-		return deviation < -(Judgement.max.window + missPadding);
+		return deviation < -(HitWindows.max + missPadding);
 	}
 }

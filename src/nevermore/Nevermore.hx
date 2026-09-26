@@ -94,6 +94,7 @@ class Nevermore {
 
 		FlxG.plugins.add(new Conductor());
 		Controls.init();
+		HitWindows.reset();
 		Judgement.reset();
 
 		NoteBehavior.register('Fake', FakeBehavior);
