@@ -34,9 +34,62 @@ class Chart {
 		return getChordCount(playerID, 4);
 	}
 
-	// TODO
+	// WIP
+	// DOESN'T SEEM TO WORK WITH ANYTHING OTHER THAN JUMPS FOR SOME REASON
+	// (and even then it's still inaccurate)
 	function getChordCount(?playerID:Int = 0, ?amount:Int = 2):Int {
-		return 0;
+		var count:Int = 0;
+		var chordLength:Int = 1; // at least 1 note/chord per row
+		var last:NoteData = null;
+		var lastChordTime:Float = 0.0;
+
+		for (i in 0 ... notes.length) {
+			var note:NoteData = notes[i];
+			// skip any other strumline
+			if (note.player != playerID) continue;
+
+			if (note.type.length != 0) {
+				var type = NoteBehavior.get(note.type);
+				if (!type.hittable || type.punishable) continue;
+			}
+
+			// skip the first note
+			if (i == 0) {
+				last = note;
+				continue;
+			}
+
+			// is this note part of a chord?
+			// check by comparing the last possible chord's time
+			//
+			// this note might also be part of another chord we've already checked,
+			// which would cause a quad to appear as 2 jumps
+			if (note.time == last.time && lastChordTime != last.time) {
+				// seems like this is in fact a proper chord
+				lastChordTime = last.time;
+				chordLength++;
+
+				// if the length of this chord is equal to what we're looking for,
+				// reset the check and start again
+				if (chordLength >= amount) {
+					count++;
+					chordLength = 1;
+					last = null;
+				}
+			
+			// either this wasn't a chord, or was part of a chord we've already checked
+			} else {
+				// to insure ie. a jump incrementing the count when we're checking for hands
+				// or hands incrementing the count when we're checking for quads
+				// etc
+				chordLength = 1;
+				last = note;
+			}
+
+			last ??= note;
+		}
+
+		return count;
 	}
 
 	function getHoldCount(?playerID:Int = 0):Int {

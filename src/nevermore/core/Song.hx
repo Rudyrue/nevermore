@@ -48,6 +48,7 @@ class Song {
 		}
 
 		result.notes = cleanedNotes.filter(function(note:NoteData) return note != null);
+		result.notes.sort((a, b) -> return Std.int(a.time - b.time));
 		return result;
 	}
 
