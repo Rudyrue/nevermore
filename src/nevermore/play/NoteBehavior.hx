@@ -2,6 +2,12 @@ package nevermore.play;
 
 import nevermore.play.note.BaseNote;
 
+enum abstract ObjectType(Int) {
+	var NOTE;
+	var SUSTAIN;
+	var RECEPTOR;
+}
+
 class NoteBehavior {
 	static var _list:Map<String, NoteBehavior> = [];
 	
@@ -30,6 +36,7 @@ class NoteBehavior {
 	public var punishable:Bool = false;
 
 	public function new() {}
+	public function applySkin(note:BaseNote, type:ObjectType) {note.strumline.skin.applyToNote(note, type == NOTE ? "note" : "sustain");}
 	public function setupData(data:NoteData) {}
 	public function setup(note:BaseNote) {}
 

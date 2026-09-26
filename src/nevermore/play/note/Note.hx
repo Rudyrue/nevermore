@@ -1,5 +1,6 @@
 package nevermore.play.note;
 
+import nevermore.play.NoteBehavior;
 import nevermore.shaders.NoteShader;
 import nevermore.core.timing.BaseClock;
 import nevermore.modchart.ModchartManager;
@@ -18,7 +19,9 @@ class Note extends BaseNote {
 
 	override function set_type(v:String):String {
 		type = v;
-		strumline.skin.applyNote(this);
+		behavior = NoteBehavior.get(type);
+		behavior.setup(this);
+		behavior.applySkin(this, NOTE);
 		return v;
 	}
 
@@ -47,8 +50,6 @@ class Note extends BaseNote {
 		color = quantization ? Quantization.current[data.snapID] : FlxColor.WHITE;
 
 		type = data.type;
-		behavior = NoteBehavior.get(type);
-		behavior.setup(this);
 
 		return this;
 	}

@@ -9,18 +9,13 @@ import flixel.FlxCamera;
 import openfl.geom.ColorTransform;
 import openfl.display.BlendMode;
 import nevermore.play.*;
+import nevermore.play.NoteBehavior;
 import nevermore.modchart.drawing.*;
 import nevermore.modchart.mods.*;
 import nevermore.modchart.timeline.*;
 import nevermore.backend.Vector3;
 
 using flixel.util.FlxColorTransformUtil;
-
-enum abstract ObjectType(Int) {
-	var NOTE;
-	var SUSTAIN;
-	var RECEPTOR;
-}
 
 @:structInit class ModRedirect {
 	@:optional public var toClass:Class<BaseModifier>;

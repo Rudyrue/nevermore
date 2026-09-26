@@ -5,6 +5,7 @@ import flixel.animation.FlxAnimation;
 import flixel.graphics.frames.FlxFrame;
 import nevermore.core.timing.BaseClock;
 #if !NEVERMORE_NO_MODCHARTS
+import nevermore.play.NoteBehavior;
 import nevermore.modchart.ModchartManager;
 #end
 
@@ -31,7 +32,17 @@ class Sustain extends Note {
 
 	override function set_type(v:String):String {
 		type = v;
-		strumline.skin.applySustain(this);
+		behavior = NoteBehavior.get(type);
+		behavior.setup(this);
+		behavior.applySkin(this, SUSTAIN);
+
+		lastScaleY = -1;
+		lastSustainScale = -1;
+
+		holdAnim = animation.getByName("piece");
+		tailAnim = animation.getByName("tail");
+		holdHeight = frames.frames[holdAnim.frames[0]].frame.height;
+		tailHeight = frames.frames[tailAnim.frames[0]].frame.height;
 		return v;
 	}
 
@@ -48,16 +59,9 @@ class Sustain extends Note {
 
 		super.setup(strumline, data);
 
-		lastScaleY = -1;
-		lastSustainScale = -1;
 		flipY = strumline.direction == DOWN;
 		timeOffset = 0;
 		visualEnd = data.visualEnd;
-
-		holdAnim = animation.getByName("piece");
-		tailAnim = animation.getByName("tail");
-		holdHeight = frames.frames[holdAnim.frames[0]].frame.height;
-		tailHeight = frames.frames[tailAnim.frames[0]].frame.height;
 
 		return this;
 	}

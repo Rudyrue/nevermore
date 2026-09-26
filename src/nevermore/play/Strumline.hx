@@ -45,7 +45,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 	// because fnf has a size of 0.7 and what not
 	public var constantSize(get, never):Float;
 	function get_constantSize():Float {
-		return 160 * 0.65 * size;
+		return skin.spacing * size;
 	}
 
 	// not static in case someone wants to override it
@@ -81,7 +81,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		var receptor:Receptor = null;
 		for (i in 0...keyCount) {
 			add(receptor = new Receptor(this, i));
-			if (skin != null) skin.applyReceptor(receptor);
+			if (skin != null) skin.apply(receptor, i, "receptor");
 
 			receptor.x += constantSize * i;
 			receptor.y += (constantSize - receptor.height) * 0.5;
