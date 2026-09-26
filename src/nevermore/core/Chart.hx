@@ -42,9 +42,10 @@ class Chart {
 		var chordLength:Int = 1; // at least 1 note/chord per row
 		var last:NoteData = null;
 		var lastChordTime:Float = 0.0;
+		var i:Int = 0;
 
-		for (i in 0 ... notes.length) {
-			var note:NoteData = notes[i];
+		for (_ in 0 ... notes.length) {
+			var note:NoteData = notes[_];
 			// skip any other strumline
 			if (note.player != playerID) continue;
 
@@ -56,6 +57,7 @@ class Chart {
 			// skip the first note
 			if (i == 0) {
 				last = note;
+				i++;
 				continue;
 			}
 
@@ -87,6 +89,7 @@ class Chart {
 			}
 
 			last ??= note;
+			i++;
 		}
 
 		return count;
