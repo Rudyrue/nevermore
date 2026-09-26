@@ -24,6 +24,10 @@ enum abstract HitWindowType(String) from String to String {
 
 	var DDR = 'DanceDanceRevolution';
 	var ITG = 'In The Groove';
+
+	var FNF_LEGACY = "Friday Night Funkin' (Legacy)";
+	var FNF_WEEK7 = "Friday Night Funkin' (Week 7)";
+	var FNF = "Friday Night Funkin'";
 }
 
 class HitWindows {
