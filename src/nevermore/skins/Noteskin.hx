@@ -90,7 +90,7 @@ class Noteskin {
 
 
 	/**
-	 * Used for sharing frame collections across secitons.
+	 * Used for sharing frame collections across sections.
 	 */
 	private var frames:Map<String, FlxFramesCollection> = [];
 	public var sections:Map<String, NoteskinSection<Dynamic>> = [];
@@ -115,6 +115,8 @@ class Noteskin {
 	}
 	public function applyToNote(to:BaseNote, section:String) {
 		inline apply(to, to.lane, section);
+		to.scale.scale(to.strumline.size);
+		to.updateHitbox();
 	}
 
 	public function getFrames(path:String, fallback:String->FlxFramesCollection) {

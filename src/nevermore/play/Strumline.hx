@@ -2,7 +2,6 @@ package nevermore.play;
 
 import flixel.group.FlxSpriteGroup;
 import nevermore.skins.Noteskin;
-import nevermore.play.Strumline;
 import nevermore.play.note.Sustain;
 
 class Strumline extends FlxTypedSpriteGroup<Receptor> {
@@ -82,6 +81,8 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		for (i in 0...keyCount) {
 			add(receptor = new Receptor(this, i));
 			if (skin != null) skin.apply(receptor, i, "receptor");
+			receptor.scale.scale(size);
+			receptor.updateHitbox();
 
 			receptor.x += constantSize * i;
 			receptor.y += (constantSize - receptor.height) * 0.5;
