@@ -50,11 +50,11 @@ abstract class NoteskinSection<T> {
 	 *
 	 * Typically "sparrow", but allows potential for other animation styles such as "grid".
 	 */
-	var style:String = "sparrow";
-	var spritesheet:String;
-	var animations:Array<NoteskinAnim<T>>;
-	var scale:Float = 0.7;
-	var antialiasing:Bool = true;
+	public var style:String = "sparrow";
+	public var spritesheet:String;
+	public var animations:Array<NoteskinAnim<T>>;
+	public var scale:Float = 0.7;
+	public var antialiasing:Bool = true;
 
 	abstract public function apply(to:FlxSprite, lane:Int):Void;
 
@@ -89,12 +89,12 @@ abstract class NoteskinSection<T> {
 		return result;
 	}
 
-	public function new(style:String, parent:Noteskin, spritesheet:String, animations:Array<NoteskinAnim<T>>, ?scale:Float = 0.7, ?antialiasing:Bool = true) {
+	public function new(style:String, parent:Noteskin, spritesheet:String, animations:Array<NoteskinAnim<T>>, ?scale:Float, ?antialiasing:Bool) {
 		this.style = spritesheet;
 		this.spritesheet = spritesheet;
 		this.animations = animations;
-		this.scale = scale;
-		this.antialiasing = antialiasing;
+		this.scale = scale ?? parent.scale;
+		this.antialiasing = antialiasing ?? parent.antialiasing;
 
 		this.frames = parent.getFrames(spritesheet, loadFrames);
 	}

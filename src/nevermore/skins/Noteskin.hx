@@ -19,8 +19,19 @@ class Noteskin {
 		cache.clear();
 	}
 
+	/**
+	 * The scale to use for `Noteskin.basic`.
+	 */
+	public static var basicScale:Float = 0.7;
+	/**
+	 * Loads a skin using only a sparrow atlas.
+	 *
+	 * @param key Which sparrow atlas to load.
+	 */
 	public static function basic(key:String) {
 		return new Noteskin({
+			scale: basicScale, // Use a static variable so people don't have to edit `NoteskinCache.getData`.
+
 			receptor: {
 				style: "sparrow", // this one actually isnt necessary but....
 				spritesheet: key,
@@ -96,6 +107,22 @@ class Noteskin {
 	public var sections:Map<String, NoteskinSection<Dynamic>> = [];
 
 	public var spacing:Float = 160 * 0.7;
+	public var scale:Float = 0.7;
+	public var antialiasing:Bool = true;
+
+	/**
+	 * Self-explainitory, goes through all the sections and modifies their scale.
+	 *
+	 * @param factor The amount to multiply by, or set if `set` is true.
+	 * @param set If the scale should directly be set to `factor` instead of multiplying, leaving no influence from the original value.
+	 */
+	public function scaleAllSections(factor:Float, ?set:Bool = false) {
+		var ogScale = scale;
+		scale = factor * (set ? 1 : scale);
+		spacing *= scale / ogScale;
+		for (sect in sections)
+			sect.scale = factor * (set ? 1 : sect.scale);
+	}
 
 	public function new(data:Dynamic) {
 		var instanceFields = Type.getInstanceFields(Noteskin);
@@ -108,6 +135,9 @@ class Noteskin {
 			else if (instanceFields.contains(field))
 				Reflect.setProperty(this, field, obj);
 		}
+
+		if (!fields.contains("spacing") && fields.contains("scale"))
+			spacing = 160 * scale;
 	}
 
 	public function apply(to:FlxSprite, lane:Int, section:String) {
